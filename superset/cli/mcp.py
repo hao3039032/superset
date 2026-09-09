@@ -17,6 +17,7 @@
 """CLI module for MCP service"""
 
 import click
+from flask.cli import with_appcontext
 
 
 @click.group()
@@ -42,3 +43,25 @@ def run(host: str, port: int, debug: bool) -> None:
             err=True,
         )
         raise click.ClickException("MCP service not available") from e
+
+
+@mcp.command("issue-token")
+@click.argument("identity")
+@click.option(
+    "--hours", type=click.IntRange(min=1), help="Validity in hours (default: 2160)"
+)
+@click.option(
+    "--permanent", is_flag=True, help="Issue a token without an expiration time"
+)
+@with_appcontext
+def issue_token(identity: str, hours: int | None, permanent: bool) -> None:
+    """Issue an MCP token for an existing username or email address."""
+    from superset.mcp_service.tokens import issue_token as sign_token
+
+    if permanent and hours is not None:
+        raise click.UsageError("Use either --hours or --permanent, not both")
+    try:
+        token = sign_token(identity, hours=None if permanent else hours or 2160)
+    except ValueError as ex:
+        raise click.ClickException(str(ex)) from ex
+    click.echo(token)

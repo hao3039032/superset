@@ -21,7 +21,7 @@ from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Protocol, Sequence
 
 import mcp.types as mt
-from fastmcp.exceptions import ToolError
+from fastmcp.exceptions import ToolError, ValidationError as MCPValidationError
 from fastmcp.server.middleware import Middleware, MiddlewareContext
 from fastmcp.server.middleware.middleware import CallNext
 from fastmcp.tools.tool import Tool, ToolResult
@@ -35,6 +35,7 @@ from superset.mcp_service.constants import (
     DEFAULT_TOKEN_LIMIT,
     DEFAULT_WARN_THRESHOLD_PCT,
 )
+from superset.utils import json
 from superset.utils.core import get_user_id
 
 logger = logging.getLogger(__name__)
@@ -118,6 +119,30 @@ def _sanitize_params(params: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+class JWTUserContextMiddleware(Middleware):
+    """Bind verified token identities to isolated Flask request contexts."""
+
+    async def on_request(
+        self,
+        context: MiddlewareContext,
+        call_next: Callable[[MiddlewareContext], Awaitable[Any]],
+    ) -> Any:
+        from fastmcp.server.dependencies import get_access_token
+        from flask import g
+
+        from superset.mcp_service.auth import get_user_from_request
+        from superset.mcp_service.flask_singleton import get_flask_app
+
+        if get_access_token() is None:
+            return await call_next(context)
+        app = get_flask_app()
+        # Explicitly push an app context: a request alone can reuse the CLI's
+        # long-lived app context and leak g.user between concurrent requests.
+        with app.app_context(), app.test_request_context("/mcp"):
+            g.user = get_user_from_request()
+            return await call_next(context)
+
+
 class LoggingMiddleware(Middleware):
     """
     Middleware that logs every MCP message (request and response) using the
@@ -137,10 +162,24 @@ class LoggingMiddleware(Middleware):
         instead of raising exceptions. These serialize to JSON containing
         an "error_type" field.
         """
-        try:
-            return '"error_type"' in result.content[0].text
-        except (AttributeError, IndexError):
+        if not isinstance(result, ToolResult):
             return False
+        if result.is_error:
+            return True
+        for item in result.content:
+            if not isinstance(item, mt.TextContent):
+                continue
+            try:
+                payload = json.loads(item.text)
+            except (ValueError, TypeError):
+                continue
+            if isinstance(payload, dict) and (
+                payload.get("success") is False
+                or payload.get("error_type")
+                or payload.get("error")
+            ):
+                return True
+        return False
 
     def _extract_context_info(
         self, context: MiddlewareContext
@@ -317,19 +356,19 @@ class StructuredContentStripperMiddleware(Middleware):
         try:
             result = await call_next(context)
         except Exception as e:
-            # When exceptions propagate past the middleware chain to the
-            # MCP SDK layer, they become CallToolResult(isError=True).
-            # Some transports (Claude.ai's MCP bridge) cannot encode these
-            # error responses, producing "encoding without a string argument".
-            # Catch ALL exceptions (not just specific types) because any
-            # unhandled exception — including ToolError from
-            # GlobalErrorHandlerMiddleware, ValueError, TypeError, etc. —
-            # will cause encoding failures on the wire.
+            # Keep failures text-only for bridge compatibility, but preserve
+            # the protocol error flag so clients can distinguish them from
+            # successful tool responses and correct their arguments.
             return ToolResult(
                 content=[mt.TextContent(type="text", text=f"Error: {e}")],
+                is_error=True,
             )
-        if isinstance(result, ToolResult) and result.structured_content is not None:
-            result = ToolResult(content=result.content, meta=result.meta)
+        if isinstance(result, ToolResult):
+            result = ToolResult(
+                content=result.content,
+                meta=result.meta,
+                is_error=LoggingMiddleware()._is_error_response(result),
+            )
         return result
 
 
@@ -386,11 +425,14 @@ class GlobalErrorHandlerMiddleware(Middleware):
             event_logger.log(
                 user_id=user_id,
                 action="mcp_tool_error",
+                dashboard_id=None,
+                slice_id=None,
+                referrer=None,
                 duration_ms=duration_ms,
                 curated_payload={
                     "tool": tool_name,
                     "error_type": type(error).__name__,
-                    "error_message": str(error),
+                    "error_message": sanitized_error,
                     "method": context.method,
                 },
             )
@@ -401,6 +443,16 @@ class GlobalErrorHandlerMiddleware(Middleware):
         if isinstance(error, ToolError):
             # Tool errors are already formatted for MCP
             raise error
+        elif isinstance(error, MCPValidationError):
+            cause = error.__cause__
+            if isinstance(cause, ValidationError):
+                details = "; ".join(
+                    f"{'.'.join(str(loc) for loc in item['loc'])}: {item['msg']}"
+                    for item in cause.errors()
+                )
+            else:
+                details = str(error)
+            raise ToolError(f"Validation error in {tool_name}: {details}") from error
         elif isinstance(error, ValidationError):
             # Pydantic validation errors
             validation_details = []

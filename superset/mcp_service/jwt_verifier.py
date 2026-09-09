@@ -31,6 +31,7 @@ import time
 from contextvars import ContextVar
 from typing import Any, cast
 
+from authlib.jose import JsonWebToken
 from authlib.jose.errors import (
     BadSignatureError,
     DecodeError,
@@ -139,6 +140,11 @@ class DetailedJWTVerifier(JWTVerifier):
     Controlled by MCP_JWT_DEBUG_ERRORS config flag.
     """
 
+    def __init__(self, **kwargs: Any) -> None:
+        """Own the decoder used by detailed diagnostics independently of FastMCP."""
+        super().__init__(**kwargs)
+        self.jwt = JsonWebToken([self.algorithm])
+
     async def load_access_token(self, token: str) -> AccessToken | None:  # noqa: C901
         """
         Validate a JWT bearer token with detailed error reporting.
@@ -206,7 +212,7 @@ class DetailedJWTVerifier(JWTVerifier):
 
             # Step 4: Check expiration
             exp = claims.get("exp")
-            if exp and exp < time.time():
+            if exp is not None and exp < time.time():
                 reason = "Token expired"
                 _jwt_failure_reason.set(reason)
                 logger.debug("Token expired for client '%s'", client_id)
@@ -278,7 +284,7 @@ class DetailedJWTVerifier(JWTVerifier):
                 token=token,
                 client_id=str(client_id),
                 scopes=scopes,
-                expires_at=int(exp) if exp else None,
+                expires_at=int(exp) if exp is not None else None,
                 claims=dict(claims),
             )
 

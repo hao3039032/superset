@@ -178,8 +178,9 @@ def get_user_from_request() -> User:
     Get the current user for the MCP tool request.
 
     Priority order:
-    1. g.user if already set (by Preset workspace middleware)
-    2. MCP_DEV_USERNAME from configuration (for development/testing)
+    1. Verified JWT subject when MCP_AUTH_ENABLED is configured
+    2. g.user if already set by trusted workspace middleware
+    3. MCP_DEV_USERNAME for development/testing
 
     Returns:
         User object with roles and groups eagerly loaded
@@ -188,6 +189,18 @@ def get_user_from_request() -> User:
         ValueError: If user cannot be authenticated or found
     """
     from flask import current_app
+
+    if current_app.config.get("MCP_AUTH_ENABLED", False):
+        from fastmcp.server.dependencies import get_access_token
+
+        token = get_access_token()
+        username = token.claims.get("sub") if token is not None else None
+        if not isinstance(username, str) or not username:
+            raise ValueError("A verified JWT with a username subject is required")
+        user = load_user_with_relationships(username=username)
+        if user is None or not user.is_active:
+            raise ValueError("Unknown or inactive Superset user")
+        return user
 
     # First check if user is already set by Preset workspace middleware
     if hasattr(g, "user") and g.user:

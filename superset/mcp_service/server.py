@@ -39,6 +39,7 @@ from superset.mcp_service.mcp_config import (
 from superset.mcp_service.middleware import (
     create_response_size_guard_middleware,
     GlobalErrorHandlerMiddleware,
+    JWTUserContextMiddleware,
     LoggingMiddleware,
     StructuredContentStripperMiddleware,
 )
@@ -553,12 +554,16 @@ def build_middleware_list() -> list[Middleware]:
     FastMCP wraps handlers so that the FIRST-added middleware is
     outermost.  Order here is outermost → innermost:
 
+    JWTUserContext wraps each authenticated request in an isolated Flask
+    context before the tool-specific middleware below.
+
     1. StructuredContentStripper — safety net, converts exceptions
        to safe ToolResult text for transports that can't encode errors
     2. LoggingMiddleware — logs tool calls with success/failure status
     3. GlobalErrorHandler — catches tool exceptions, raises ToolError
     """
     return [
+        JWTUserContextMiddleware(),
         StructuredContentStripperMiddleware(),
         LoggingMiddleware(),
         GlobalErrorHandlerMiddleware(),

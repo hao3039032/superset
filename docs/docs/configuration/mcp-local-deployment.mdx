@@ -1,0 +1,129 @@
+---
+title: MCP deployment from a pinned source revision
+sidebar_position: 99
+---
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+This fork is based on Apache Superset 6.1.0. Its fixes live in the Python source,
+not in startup monkey patches or files copied into running containers.
+
+## Authentication and tokens
+
+The web application and MCP process share the metadata database and Superset
+configuration. The MCP process resolves the verified JWT `sub` claim to an active
+Superset username on every tool call. It does not use the development user as a
+fallback when authentication is enabled. Existing RBAC checks still apply.
+
+Configure the following in your external `superset_config.py`:
+
+```python
+from pathlib import Path
+
+MCP_AUTH_ENABLED = True
+MCP_JWT_ALGORITHM = "HS256"
+MCP_JWT_ISSUER = "superset-mcp"
+MCP_JWT_AUDIENCE = "superset-mcp"
+MCP_JWT_SECRET = Path("/run/secrets/mcp_jwt_secret").read_text().strip()
+MCP_SERVICE_URL = "https://superset.example.com"
+WEBDRIVER_BASEURL_USER_FRIENDLY = "https://superset.example.com/"
+```
+
+Keep the JWT secret outside the image and source repository. Reuse the existing
+secret, issuer and audience when migrating an existing installation; changing
+these values invalidates previously issued tokens. The Superset `SECRET_KEY`
+is separate and must also be preserved for encrypted database credentials.
+
+Issue a token on an administrator-controlled host or container with the shared
+configuration:
+
+```bash
+superset mcp issue-token alice@example.com --permanent
+# Or issue a token with a bounded lifetime:
+superset mcp issue-token alice --hours 2160
+```
+
+An exact username is matched first, then email is matched case-insensitively.
+Ambiguous email matches are rejected. The token always uses the account's actual
+username as its subject. `--permanent` omits expiration; disabling the associated
+user prevents further tool calls. Re-enabling that user makes its existing tokens
+usable again. Individual token revocation is not implemented. Rotating the signing
+secret invalidates all tokens signed with the previous secret.
+
+Clients use Streamable HTTP with `Authorization: Bearer <token>` and the HTTPS
+MCP endpoint. No SSH tunnel is required when the reverse proxy exposes `/mcp`.
+
+## Build a reviewable image
+
+Check out an explicitly reviewed commit before building. The custom Dockerfile
+retains the frontend assets from the matching official 6.1.0 image and installs
+this checkout's Python source, along with MCP and database driver dependencies.
+
+```bash
+git fetch origin
+git checkout --detach <reviewed-commit>
+docker build -f docker/Dockerfile.mcp \
+  --build-arg VCS_REF="$(git rev-parse HEAD)" \
+  -t <registry>/superset:6.1.0-mcp-<short-commit> .
+```
+
+Record the resulting image digest and Python dependency inventory. Deploy the
+same reviewed image to the web, worker, scheduler and MCP services. Use an image
+digest for deployment; do not use a floating `latest` tag or reinstall packages
+at container startup.
+
+The MCP container's command is the official CLI entry point:
+
+```yaml
+command: ["superset", "mcp", "run", "--host", "0.0.0.0", "--port", "5008"]
+```
+
+Mount configuration and secrets separately, preferably read-only, and preserve
+the metadata database and Superset home volumes. Remove the old
+`mcp-server-lwutil.py`/`mcp_compat.py` startup wrapper from the deployment command
+when adopting this image. The new source resolves JWT identities and handles
+errors directly, so the wrapper must not be layered on top.
+
+For an existing Nginx `/mcp` proxy, retain authorization forwarding, HTTP/1.1,
+streaming without buffering, and the existing TLS certificate. Preparing this
+source branch does not change or restart a live deployment.
+
+## Error handling and schema discovery
+
+Tool search includes complete input schemas by default, including nested
+`request` models and required fields. For example, chart generation uses
+`request.dataset_id` and `request.chart_name`, not `datasource_id` or `slice_name`.
+`config` must include `chart_type`; read the `chart://configs` resource for that
+chart type's configuration schema.
+
+Invalid parameters produce a validation error with `isError: true`. Error schemas
+also set that protocol flag, while nullable `error`/`error_type` fields in a
+successful SQL result do not make the call fail. Error auditing supplies the
+required event fields. Correctly executed SQL containing invalid column names
+still returns the database's error; these changes do not rewrite SQL.
+
+## Validation before deployment
+
+Run the JWT/token, middleware, SQL and chart regression tests. In an isolated
+installation, verify unauthenticated/invalid-token rejection, two distinct users'
+permissions, SQL success and failure, schema discovery and chart previews.
+Then recreate only the isolated MCP container and verify that an existing token
+continues to work with the unchanged external secret. Do not perform this check
+against a service being used by an analysis job.

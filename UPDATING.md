@@ -24,6 +24,13 @@ assists people when migrating to a new version.
 
 ## Next
 
+### MCP error transport
+
+The optional `fastmcp` dependency requires version 3.4.7 or newer (below 4.0)
+to preserve the `ToolResult.is_error` flag. Tool search returns complete input
+schemas by default; set `MCP_TOOL_SEARCH_CONFIG` explicitly to opt into compact
+or summary-only discovery.
+
 ## 6.1.0
 
 ### ClickHouse minimum driver version bump
