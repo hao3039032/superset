@@ -187,15 +187,22 @@ async def test_concurrent_requests_keep_distinct_flask_users(app_context: None) 
     app = current_app._get_current_object()
     g.user = SimpleNamespace(username="outer-user")
 
-    async def invoke(username: str) -> str:
-        subject.set(username)
+    def invoke(username: str) -> Any:
+        async def runner() -> Any:
+            # Set inside the coroutine: gather runs both sequentially, and
+            # the token lookup must observe each task's own subject.
+            subject.set(username)
 
-        async def handler(context: Any) -> str:
-            await asyncio.sleep(0)
-            assert g.user.username == username
-            return g.user.username
+            async def handler(context: Any) -> str:
+                await asyncio.sleep(0)
+                assert g.user.username == username
+                return g.user.username
 
-        return await JWTUserContextMiddleware().on_request(MagicMock(), handler)
+            return await JWTUserContextMiddleware().on_request(
+                MagicMock(method="tools/call"), handler
+            )
+
+        return runner()
 
     with (
         patch.dict(app.config, MCP_AUTH_ENABLED=True),
@@ -213,6 +220,92 @@ async def test_concurrent_requests_keep_distinct_flask_users(app_context: None) 
     ):
         assert await asyncio.gather(invoke("alice"), invoke("bob")) == ["alice", "bob"]
     assert g.user.username == "outer-user"
+
+
+@pytest.mark.asyncio
+async def test_non_tool_messages_skip_identity_resolution(app_context: None) -> None:
+    from superset.mcp_service.middleware import JWTUserContextMiddleware
+
+    async def handler(context: Any) -> str:
+        return "ok"
+
+    with patch("superset.mcp_service.auth.get_user_from_request") as resolve:
+        for method in [
+            "initialize",
+            "tools/list",
+            "prompts/list",
+            "notifications/initialized",
+        ]:
+            result = await JWTUserContextMiddleware().on_request(
+                MagicMock(method=method), handler
+            )
+            assert result == "ok"
+    resolve.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_identity_resolution_failure_raises_tool_error(
+    app_context: None,
+) -> None:
+    from fastmcp.exceptions import ToolError
+
+    from superset.mcp_service.middleware import JWTUserContextMiddleware
+
+    async def handler(context: Any) -> str:
+        raise AssertionError("handler must not run for an unresolved identity")
+
+    with (
+        patch.dict(current_app.config, MCP_AUTH_ENABLED=True),
+        patch(
+            "fastmcp.server.dependencies.get_access_token",
+            return_value=SimpleNamespace(claims={"sub": "alice"}),
+        ),
+        patch(
+            "superset.mcp_service.auth.get_user_from_request",
+            side_effect=ValueError("Unknown or inactive Superset user"),
+        ),
+        patch(
+            "superset.mcp_service.flask_singleton.get_flask_app",
+            return_value=current_app._get_current_object(),
+        ),
+    ):
+        with pytest.raises(ToolError, match="Authentication failed"):
+            await JWTUserContextMiddleware().on_request(
+                MagicMock(method="tools/call"), handler
+            )
+
+
+def test_verified_subject_reuses_middleware_resolved_user(app_context: None) -> None:
+    user = SimpleNamespace(username="alice", is_active=True)
+    g.user = user
+    with (
+        patch.dict(current_app.config, MCP_AUTH_ENABLED=True),
+        patch(
+            "fastmcp.server.dependencies.get_access_token",
+            return_value=SimpleNamespace(claims={"sub": "alice"}),
+        ),
+        patch("superset.mcp_service.auth.load_user_with_relationships") as loader,
+    ):
+        assert get_user_from_request() is user
+    loader.assert_not_called()
+
+
+def test_verified_subject_rejects_mismatched_cached_user(app_context: None) -> None:
+    fresh = SimpleNamespace(username="alice", is_active=True)
+    g.user = SimpleNamespace(username="someone-else", is_active=True)
+    with (
+        patch.dict(current_app.config, MCP_AUTH_ENABLED=True),
+        patch(
+            "fastmcp.server.dependencies.get_access_token",
+            return_value=SimpleNamespace(claims={"sub": "alice"}),
+        ),
+        patch(
+            "superset.mcp_service.auth.load_user_with_relationships",
+            return_value=fresh,
+        ) as loader,
+    ):
+        assert get_user_from_request() is fresh
+    loader.assert_called_once_with(username="alice")
 
 
 @pytest.mark.asyncio

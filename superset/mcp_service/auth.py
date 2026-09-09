@@ -197,6 +197,17 @@ def get_user_from_request() -> User:
         username = token.claims.get("sub") if token is not None else None
         if not isinstance(username, str) or not username:
             raise ValueError("A verified JWT with a username subject is required")
+        # Reuse an identity already resolved for this request by
+        # JWTUserContextMiddleware; the username check prevents stale or
+        # mismatched identities (e.g. a workspace middleware's g.user) from
+        # being trusted without a fresh lookup.
+        if (
+            hasattr(g, "user")
+            and g.user is not None
+            and getattr(g.user, "username", None) == username
+            and g.user.is_active
+        ):
+            return g.user
         user = load_user_with_relationships(username=username)
         if user is None or not user.is_active:
             raise ValueError("Unknown or inactive Superset user")

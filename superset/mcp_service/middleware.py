@@ -128,18 +128,27 @@ class JWTUserContextMiddleware(Middleware):
         call_next: Callable[[MiddlewareContext], Awaitable[Any]],
     ) -> Any:
         from fastmcp.server.dependencies import get_access_token
+
+        # Only tool calls need a user identity; initialize/list notifications
+        # skip identity resolution to avoid a database lookup per message.
+        if context.method != "tools/call" or get_access_token() is None:
+            return await call_next(context)
+
         from flask import g
 
         from superset.mcp_service.auth import get_user_from_request
         from superset.mcp_service.flask_singleton import get_flask_app
 
-        if get_access_token() is None:
-            return await call_next(context)
         app = get_flask_app()
         # Explicitly push an app context: a request alone can reuse the CLI's
         # long-lived app context and leak g.user between concurrent requests.
         with app.app_context(), app.test_request_context("/mcp"):
-            g.user = get_user_from_request()
+            try:
+                g.user = get_user_from_request()
+            except ValueError as e:
+                # Auth errors raised outside the tool middleware chain must
+                # still reach the client as an actionable tool error.
+                raise ToolError(f"Authentication failed: {e}") from e
             return await call_next(context)
 
 
