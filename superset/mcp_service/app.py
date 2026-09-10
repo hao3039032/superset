@@ -166,6 +166,7 @@ Chart Types You Can CREATE with generate_chart/generate_explore_link:
   temporal_column="<date_col>": Big Number with trendline
 - chart_type="table": Data table for detailed views
 - chart_type="table", viz_type="ag-grid-table": Interactive AG Grid table
+- chart_type="sankey_v2": Sankey flows (source, target, metric)
 - chart_type="pie": Pie chart for proportional data (set donut=True for donut)
 - chart_type="pivot_table": Interactive pivot table for cross-tabulation
 - chart_type="mixed_timeseries": Dual-series chart combining two chart types

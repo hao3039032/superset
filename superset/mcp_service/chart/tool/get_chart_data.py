@@ -299,10 +299,18 @@ async def get_chart_data(  # noqa: C901
                 cached_viz_type = cached_form_data_dict.get(
                     "viz_type", chart.viz_type or ""
                 )
-                if cached_viz_type in ("big_number", "big_number_total", "pop_kpi"):
+                if cached_viz_type == "sankey_v2":
                     metric = cached_form_data_dict.get("metric")
                     cached_metrics = [metric] if metric else []
-                    cached_groupby: list[str] = []
+                    cached_groupby = [
+                        cached_form_data_dict[k]
+                        for k in ("source", "target")
+                        if cached_form_data_dict.get(k)
+                    ]
+                elif cached_viz_type in ("big_number", "big_number_total", "pop_kpi"):
+                    metric = cached_form_data_dict.get("metric")
+                    cached_metrics = [metric] if metric else []
+                    cached_groupby = []
                 else:
                     cached_metrics = cached_form_data_dict.get("metrics", [])
                     raw_groupby = cached_form_data_dict.get("groupby", [])
@@ -415,7 +423,13 @@ async def get_chart_data(  # noqa: C901
                     "gauge_chart",
                 )
 
-                if viz_type == "bubble":
+                if viz_type == "sankey_v2":
+                    metric = form_data.get("metric")
+                    metrics = [metric] if metric else []
+                    groupby_columns = [
+                        form_data[k] for k in ("source", "target") if form_data.get(k)
+                    ]
+                elif viz_type == "bubble":
                     # Bubble charts store metrics in x, y, size fields
                     bubble_metrics = []
                     for field in ("x", "y", "size"):
@@ -423,7 +437,7 @@ async def get_chart_data(  # noqa: C901
                         if m:
                             bubble_metrics.append(m)
                     metrics = bubble_metrics
-                    groupby_columns: list[str] = list(
+                    groupby_columns = list(
                         form_data.get("entity", None) and [form_data["entity"]] or []
                     )
                     series_field = form_data.get("series")

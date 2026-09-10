@@ -158,7 +158,7 @@ async def generate_chart(  # noqa: C901
     - Set save_chart=True to permanently save the chart
     - LLM clients MUST display returned chart URL to users
     - Use numeric dataset ID or UUID (NOT schema.table_name format)
-    - MUST include chart_type in config (either 'xy' or 'table')
+    - MUST include chart_type; discover types using get_chart_type_schema
 
     IMPORTANT: The 'chart_type' field in the config is a DISCRIMINATOR that determines
     which chart configuration schema to use. It MUST be included and MUST match the

@@ -33,6 +33,7 @@ from superset.mcp_service.chart.schemas import (
     MixedTimeseriesChartConfig,
     PieChartConfig,
     PivotTableChartConfig,
+    SankeyChartConfig,
     TableChartConfig,
     XYChartConfig,
 )
@@ -44,6 +45,7 @@ _CHART_TYPE_ADAPTERS: Dict[str, TypeAdapter[Any]] = {
     "xy": TypeAdapter(XYChartConfig),
     "table": TypeAdapter(TableChartConfig),
     "pie": TypeAdapter(PieChartConfig),
+    "sankey_v2": TypeAdapter(SankeyChartConfig),
     "pivot_table": TypeAdapter(PivotTableChartConfig),
     "mixed_timeseries": TypeAdapter(MixedTimeseriesChartConfig),
     "handlebars": TypeAdapter(HandlebarsChartConfig),
@@ -77,6 +79,14 @@ _CHART_EXAMPLES: Dict[str, list[Dict[str, Any]]] = {
                 {"name": "revenue", "aggregate": "SUM"},
             ],
         },
+    ],
+    "sankey_v2": [
+        {
+            "chart_type": "sankey_v2",
+            "source": {"name": "from_stage"},
+            "target": {"name": "to_stage"},
+            "metric": {"name": "users", "aggregate": "SUM"},
+        }
     ],
     "pie": [
         {
@@ -165,7 +175,7 @@ def get_chart_type_schema(
     Use this tool to discover the exact fields, types, and constraints
     for a chart configuration before calling generate_chart or update_chart.
 
-    Valid chart_type values: xy, table, pie, pivot_table,
+    Valid chart_type values: xy, table, pie, sankey_v2, pivot_table,
     mixed_timeseries, handlebars, big_number.
 
     Returns the JSON Schema for the requested chart type, optionally

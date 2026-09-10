@@ -152,6 +152,7 @@ class SchemaValidator:
             "xy": SchemaValidator._pre_validate_xy_config,
             "table": SchemaValidator._pre_validate_table_config,
             "pie": SchemaValidator._pre_validate_pie_config,
+            "sankey_v2": SchemaValidator._pre_validate_sankey_config,
             "pivot_table": SchemaValidator._pre_validate_pivot_table_config,
             "mixed_timeseries": SchemaValidator._pre_validate_mixed_timeseries_config,
             "handlebars": SchemaValidator._pre_validate_handlebars_config,
@@ -257,6 +258,24 @@ class SchemaValidator:
                 error_code="INVALID_COLUMNS_FORMAT",
             )
 
+        return True, None
+
+    @staticmethod
+    def _pre_validate_sankey_config(
+        config: Dict[str, Any],
+    ) -> Tuple[bool, ChartGenerationError | None]:
+        """Explain missing Sankey fields before schema validation."""
+        missing = [
+            field for field in ("source", "target", "metric") if field not in config
+        ]
+        if missing:
+            return False, ChartGenerationError(
+                error_type="missing_sankey_fields",
+                message=f"Sankey chart missing required fields: {', '.join(missing)}",
+                details="Source and target define nodes; metric weights each edge.",
+                suggestions=["Use get_chart_type_schema with chart_type='sankey_v2'"],
+                error_code="MISSING_SANKEY_FIELDS",
+            )
         return True, None
 
     @staticmethod

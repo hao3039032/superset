@@ -230,7 +230,7 @@ async def update_chart(  # noqa: C901
     - Set generate_preview=False to persist the update immediately.
     - LLM clients MUST display the returned explore URL to users.
     - Use numeric ID or UUID string to identify the chart (NOT chart name).
-    - MUST include chart_type in config (either 'xy' or 'table').
+    - MUST include chart_type; discover types using get_chart_type_schema.
 
     Example usage (preview, default):
     ```json

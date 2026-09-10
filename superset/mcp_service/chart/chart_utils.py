@@ -37,6 +37,7 @@ from superset.mcp_service.chart.schemas import (
     MixedTimeseriesChartConfig,
     PieChartConfig,
     PivotTableChartConfig,
+    SankeyChartConfig,
     TableChartConfig,
     XYChartConfig,
 )
@@ -312,6 +313,7 @@ def map_config_to_form_data(
     config: TableChartConfig
     | XYChartConfig
     | PieChartConfig
+    | SankeyChartConfig
     | PivotTableChartConfig
     | MixedTimeseriesChartConfig
     | HandlebarsChartConfig
@@ -323,6 +325,8 @@ def map_config_to_form_data(
         return map_table_config(config)
     elif isinstance(config, XYChartConfig):
         return map_xy_config(config, dataset_id=dataset_id)
+    elif isinstance(config, SankeyChartConfig):
+        return map_sankey_config(config)
     elif isinstance(config, PieChartConfig):
         return map_pie_config(config)
     elif isinstance(config, PivotTableChartConfig):
@@ -332,12 +336,15 @@ def map_config_to_form_data(
     elif isinstance(config, HandlebarsChartConfig):
         return map_handlebars_config(config)
     elif isinstance(config, BigNumberChartConfig):
-        if config.show_trendline and config.temporal_column:
-            if not is_column_truly_temporal(config.temporal_column, dataset_id):
-                raise ValueError(
-                    f"Big Number trendline requires a temporal SQL column; "
-                    f"'{config.temporal_column}' is not temporal."
-                )
+        if (
+            config.show_trendline
+            and config.temporal_column
+            and not is_column_truly_temporal(config.temporal_column, dataset_id)
+        ):
+            raise ValueError(
+                f"Big Number trendline requires a temporal SQL column; "
+                f"'{config.temporal_column}' is not temporal."
+            )
         return map_big_number_config(config)
     else:
         raise ValueError(f"Unsupported config type: {type(config)}")
@@ -682,6 +689,26 @@ def map_xy_config(
     add_legend_config(form_data, config)
     add_orientation_config(form_data, config)
 
+    return form_data
+
+
+def map_sankey_config(config: SankeyChartConfig) -> Dict[str, Any]:
+    """Map Sankey settings and ordering to the 6.1 frontend query contract."""
+    metric = create_metric_object(config.metric)
+    orderby: list[Any] = [[metric, False]] if config.sort_by_metric else []
+    orderby.extend([[config.source.name, True], [config.target.name, True]])
+    form_data: Dict[str, Any] = {
+        "viz_type": "sankey_v2",
+        "source": config.source.name,
+        "target": config.target.name,
+        "groupby": [config.source.name, config.target.name],
+        "metric": metric,
+        "orderby": orderby,
+        "sort_by_metric": config.sort_by_metric,
+        "row_limit": config.row_limit,
+        "color_scheme": config.color_scheme,
+    }
+    _add_adhoc_filters(form_data, config.filters)
     return form_data
 
 
@@ -1099,6 +1126,7 @@ def generate_chart_name(
     config: TableChartConfig
     | XYChartConfig
     | PieChartConfig
+    | SankeyChartConfig
     | PivotTableChartConfig
     | MixedTimeseriesChartConfig
     | HandlebarsChartConfig
@@ -1124,6 +1152,10 @@ def generate_chart_name(
     elif isinstance(config, XYChartConfig):
         what = _xy_chart_what(config)
         context = _xy_chart_context(config)
+    elif isinstance(config, SankeyChartConfig):
+        metric_label = config.metric.label or config.metric.name
+        what = f"{config.source.name} → {config.target.name} by {metric_label}"
+        context = _summarize_filters(config.filters)
     elif isinstance(config, PieChartConfig):
         what = _pie_chart_what(config)
         context = _summarize_filters(config.filters)
@@ -1162,6 +1194,8 @@ def _resolve_viz_type(config: Any) -> str:
         return viz_type_map.get(kind, "echarts_timeseries_line")
     elif chart_type == "table":
         return getattr(config, "viz_type", "table")
+    elif chart_type == "sankey_v2":
+        return "sankey_v2"
     elif chart_type == "pie":
         return "pie"
     elif chart_type == "pivot_table":

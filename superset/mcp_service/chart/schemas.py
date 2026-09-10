@@ -633,6 +633,29 @@ class FilterConfig(BaseModel):
 
 
 # Actual chart types
+class SankeyChartConfig(UnknownFieldCheckMixin):
+    """Weighted flows matching the Superset 6.1 Sankey frontend contract."""
+
+    chart_type: Literal["sankey_v2"] = "sankey_v2"
+    source: ColumnRef = Field(..., description="Source node column")
+    target: ColumnRef = Field(..., description="Target node column")
+    metric: ColumnRef = Field(..., description="Edge weight: aggregate or saved metric")
+    sort_by_metric: bool = True
+    row_limit: int = Field(10000, ge=1, le=100000)
+    filters: List[FilterConfig] | None = None
+    color_scheme: str = Field("supersetColors", min_length=1, max_length=100)
+
+    @model_validator(mode="after")
+    def validate_nodes_and_metric(self) -> "SankeyChartConfig":
+        """Require node dimensions and an explicit aggregate or saved metric."""
+        for name, column in (("source", self.source), ("target", self.target)):
+            if column.is_metric:
+                raise ValueError(f"{name} must be a plain node column, not a metric")
+        if not self.metric.is_metric:
+            raise ValueError("metric requires an aggregate or saved_metric=True")
+        return self
+
+
 class PieChartConfig(UnknownFieldCheckMixin):
     model_config = ConfigDict(extra="ignore", populate_by_name=True)
 
@@ -1162,6 +1185,7 @@ ChartConfig = Annotated[
     XYChartConfig
     | TableChartConfig
     | PieChartConfig
+    | SankeyChartConfig
     | PivotTableChartConfig
     | MixedTimeseriesChartConfig
     | HandlebarsChartConfig
@@ -1170,7 +1194,7 @@ ChartConfig = Annotated[
         discriminator="chart_type",
         description=(
             "Chart configuration - specify chart_type as 'xy', 'table', "
-            "'pie', 'pivot_table', 'mixed_timeseries', 'handlebars', "
+            "'pie', 'sankey_v2', 'pivot_table', 'mixed_timeseries', 'handlebars', "
             "or 'big_number'"
         ),
     ),
@@ -1186,6 +1210,7 @@ _CHART_CONFIG_DESCRIPTION = (
     "Chart configuration object. MUST include 'chart_type' to select the "
     "schema. Types: 'xy' (x, y, kind: line/bar/area/scatter), "
     "'table' (columns), 'pie' (dimension, metric), "
+    "'sankey_v2' (source, target, metric), "
     "'pivot_table' (rows, metrics), 'mixed_timeseries' (x, y, y_secondary), "
     "'handlebars' (columns, handlebars_template), "
     "'big_number' (metric). "
@@ -1199,6 +1224,7 @@ def parse_chart_config(
     XYChartConfig
     | TableChartConfig
     | PieChartConfig
+    | SankeyChartConfig
     | PivotTableChartConfig
     | MixedTimeseriesChartConfig
     | HandlebarsChartConfig
