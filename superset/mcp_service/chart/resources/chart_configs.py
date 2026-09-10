@@ -255,6 +255,16 @@ def get_chart_configs_resource() -> str:
     }
 
     resource_data = {
+        "sankey_chart_configs": {
+            "weighted_flows": {
+                "config": {
+                    "chart_type": "sankey_v2",
+                    "source": {"name": "from_stage"},
+                    "target": {"name": "to_stage"},
+                    "metric": {"name": "users", "aggregate": "SUM"},
+                }
+            }
+        },
         "xy_chart_configs": xy_chart_configs,
         "table_chart_configs": table_chart_configs,
         "best_practices": best_practices,

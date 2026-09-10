@@ -39,6 +39,9 @@ logger = logging.getLogger(__name__)
 
 def _build_query_columns(form_data: Dict[str, Any]) -> list[str]:
     """Build query columns list from form_data, including both x_axis and groupby."""
+    if form_data.get("viz_type") == "sankey_v2":
+        return [form_data[key] for key in ("source", "target") if form_data.get(key)]
+
     # Table charts in raw mode use all_columns or columns
     all_columns = form_data.get("all_columns", [])
     raw_columns_field = form_data.get("columns", [])

@@ -26,6 +26,7 @@ from typing import Any, Dict, List, Tuple
 
 from superset.mcp_service.chart.schemas import (
     ColumnRef,
+    SankeyChartConfig,
     TableChartConfig,
     XYChartConfig,
 )
@@ -53,7 +54,7 @@ class DatasetValidator:
 
     @staticmethod
     def validate_against_dataset(
-        config: TableChartConfig | XYChartConfig,
+        config: TableChartConfig | XYChartConfig | SankeyChartConfig,
         dataset_id: int | str,
         dataset_context: DatasetContext | None = None,
     ) -> Tuple[bool, ChartGenerationError | None]:
@@ -97,7 +98,7 @@ class DatasetValidator:
             return False, column_error
 
         # Validate aggregation compatibility
-        if isinstance(config, (TableChartConfig, XYChartConfig)):
+        if isinstance(config, (TableChartConfig, XYChartConfig, SankeyChartConfig)):
             aggregation_errors = DatasetValidator._validate_aggregations(
                 column_refs, dataset_context
             )
@@ -196,13 +197,15 @@ class DatasetValidator:
 
     @staticmethod
     def _extract_column_references(
-        config: TableChartConfig | XYChartConfig,
+        config: TableChartConfig | XYChartConfig | SankeyChartConfig,
     ) -> List[ColumnRef]:
         """Extract all column references from configuration."""
         refs = []
 
         if isinstance(config, TableChartConfig):
             refs.extend(config.columns)
+        elif isinstance(config, SankeyChartConfig):
+            refs.extend([config.source, config.target, config.metric])
         elif isinstance(config, XYChartConfig):
             refs.append(config.x)
             refs.extend(config.y)
@@ -319,10 +322,10 @@ class DatasetValidator:
 
     @staticmethod
     def normalize_column_names(
-        config: TableChartConfig | XYChartConfig,
+        config: TableChartConfig | XYChartConfig | SankeyChartConfig,
         dataset_id: int | str,
         dataset_context: DatasetContext | None = None,
-    ) -> TableChartConfig | XYChartConfig:
+    ) -> TableChartConfig | XYChartConfig | SankeyChartConfig:
         """
         Normalize column names in config to match the canonical dataset column names.
 
@@ -354,12 +357,20 @@ class DatasetValidator:
         elif isinstance(config, TableChartConfig):
             DatasetValidator._normalize_table_config(config_dict, dataset_context)
 
-        # Normalize filter columns (common to both config types)
+        elif isinstance(config, SankeyChartConfig):
+            for key in ("source", "target", "metric"):
+                config_dict[key]["name"] = DatasetValidator._get_canonical_column_name(
+                    config_dict[key]["name"], dataset_context
+                )
+
+        # Normalize filter columns (common to all config types)
         DatasetValidator._normalize_filters(config_dict, dataset_context)
 
         # Reconstruct the config with normalized names
         if isinstance(config, XYChartConfig):
             return XYChartConfig.model_validate(config_dict)
+        if isinstance(config, SankeyChartConfig):
+            return SankeyChartConfig.model_validate(config_dict)
         return TableChartConfig.model_validate(config_dict)
 
     @staticmethod
