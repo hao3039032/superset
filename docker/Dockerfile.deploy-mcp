@@ -11,8 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Supply the existing, dependency-complete 6.1.0 image by immutable ID.
-ARG BASE_IMAGE
+# Verify the existing 6.1.0 image ID before supplying its local snapshot tag.
+ARG BASE_IMAGE=superset-local:6.1.0-mcp-2a711cf17
 FROM ${BASE_IMAGE}
 USER root
 WORKDIR /app

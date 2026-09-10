@@ -63,8 +63,9 @@ Use `add_chart_to_existing_dashboard` to place the generated chart on a dashboar
 ## Build and rollout
 
 Build from the exact merged commit using `docker/Dockerfile.deploy-mcp`.
-Supply `BASE_IMAGE` as the immutable ID of the dependency-complete 6.1.0 MCP
-image and `VCS_REF` as the full Git commit. The build replaces Python source
+Supply `BASE_IMAGE` as a local snapshot tag of the dependency-complete 6.1.0
+MCP image, verify its image ID with `docker inspect`, and supply `VCS_REF` as
+the full Git commit. Dockerfile FROM does not accept a bare image ID. The build replaces Python source
 without resolving or upgrading runtime dependencies; the existing image uses
 editable installs under `/app` and retains the official frontend assets.
 
