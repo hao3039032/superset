@@ -18,8 +18,9 @@
 """Tests for MCP tool search transform configuration and application."""
 
 from types import SimpleNamespace
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 
+import pytest
 from fastmcp.server.transforms.search import BM25SearchTransform, RegexSearchTransform
 
 from superset.mcp_service.mcp_config import MCP_TOOL_SEARCH_CONFIG
@@ -31,6 +32,7 @@ from superset.mcp_service.server import (
     _fix_call_tool_arguments,
     _normalize_call_tool_arguments,
     _serialize_tools_without_output_schema,
+    _strip_tool_namespace,
     _truncate_description,
 )
 from superset.utils import json
@@ -179,6 +181,38 @@ def test_serialize_tools_handles_no_output_schema():
     assert len(result) == 1
     assert result[0]["name"] == "simple_tool"
     assert "outputSchema" not in result[0]
+
+
+# -- _strip_tool_namespace tests --
+
+
+def test_strip_namespace_removes_server_prefix():
+    """Namespaced name with a server segment is stripped to the bare tool."""
+    assert _strip_tool_namespace("mcp__superset__list_charts") == "list_charts"
+
+
+def test_strip_namespace_removes_prefix_without_server():
+    """Namespaced name without a server segment still strips correctly."""
+    assert _strip_tool_namespace("mcp__list_charts") == "list_charts"
+
+
+def test_strip_namespace_leaves_bare_name_unchanged():
+    """Bare tool names pass through unchanged."""
+    assert _strip_tool_namespace("list_charts") == "list_charts"
+    assert _strip_tool_namespace("call_tool") == "call_tool"
+
+
+def test_strip_namespace_preserves_tool_names_with_underscores():
+    """Underscores inside the tool name survive the strip."""
+    assert (
+        _strip_tool_namespace("mcp__superset__get_chart_preview")
+        == "get_chart_preview"
+    )
+
+
+def test_strip_namespace_leaves_non_mcp_prefixed_name_unchanged():
+    """Names not following the mcp__ convention pass through unchanged."""
+    assert _strip_tool_namespace("some__other__name") == "some__other__name"
 
 
 # -- _normalize_call_tool_arguments tests --
@@ -849,3 +883,62 @@ def test_create_serializer_include_schemas_true_with_compact():
     assert result[0]["inputSchema"]["properties"]["filters"]["items"] == {
         "type": "object"
     }
+
+
+# -- call_tool proxy namespace handling tests --
+
+
+@pytest.mark.asyncio
+async def test_call_tool_proxy_strips_namespace_and_forwards():
+    """Namespaced tool names are stripped before lookup and forwarding."""
+    from fastmcp.server.context import Context
+
+    config = {
+        "strategy": "bm25",
+        "search_tool_name": "search_tools",
+        "call_tool_name": "call_tool",
+    }
+    mock_mcp = MagicMock()
+    _apply_tool_search_transform(mock_mcp, config)
+    transform = mock_mcp.add_transform.call_args[0][0]
+
+    # Rebuild the proxy tool the transform would register, then drive its
+    # inner function directly with a mock Context.
+    proxy_tool = transform._make_call_tool()
+    inner = proxy_tool.fn
+
+    ctx = MagicMock(spec=Context)
+    ctx.fastmcp.get_tool = AsyncMock(return_value=MagicMock(parameters={}))
+    ctx.fastmcp.call_tool = AsyncMock(return_value=MagicMock())
+
+    await inner(
+        "mcp__superset__list_dashboards",
+        {"request": {"page": 1}},
+        ctx=ctx,
+    )
+
+    ctx.fastmcp.call_tool.assert_awaited_once_with(
+        "list_dashboards", {"request": {"page": 1}}
+    )
+
+
+@pytest.mark.asyncio
+async def test_call_tool_proxy_rejects_namespaced_synthetic_tool():
+    """Calling the synthetic tools via their namespaced names is rejected."""
+    from fastmcp.server.context import Context
+
+    config = {
+        "strategy": "bm25",
+        "search_tool_name": "search_tools",
+        "call_tool_name": "call_tool",
+    }
+    mock_mcp = MagicMock()
+    _apply_tool_search_transform(mock_mcp, config)
+    transform = mock_mcp.add_transform.call_args[0][0]
+
+    proxy_tool = transform._make_call_tool()
+    inner = proxy_tool.fn
+
+    ctx = MagicMock(spec=Context)
+    with pytest.raises(ValueError, match="synthetic search tool"):
+        await inner("mcp__superset__call_tool", None, ctx=ctx)

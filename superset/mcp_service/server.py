@@ -24,6 +24,7 @@ For multi-pod deployments, configure MCP_EVENT_STORE_CONFIG with Redis URL.
 
 import logging
 import os
+import re
 from collections.abc import Sequence
 from typing import Annotated, Any
 
@@ -47,6 +48,28 @@ from superset.mcp_service.storage import _create_redis_store
 from superset.utils import json
 
 logger = logging.getLogger(__name__)
+
+# Regex matching namespaced MCP tool names such as ``mcp__superset__list_charts``.
+# Some MCP bridges pass the fully-qualified client-side name to the server's
+# ``call_tool`` proxy, where the bare tool name is expected; the prefix is
+# stripped before lookup so these calls resolve instead of failing with an
+# opaque NotFoundError.
+_MCP_NAMESPACED_TOOL_NAME = re.compile(r"^mcp__(?:(?P<server>[^_]+)__)?(?P<tool>.+)$")
+
+
+def _strip_tool_namespace(name: str) -> str:
+    """Strip the ``mcp__<server>__`` prefix from a tool name, if present.
+
+    Non-namespaced names (including the synthetic search tools themselves)
+    are returned unchanged.  Names that don't follow the ``mcp__`` scheme
+    are also returned unchanged so behavior for other tool naming
+    conventions is preserved.
+    """
+    if not name.startswith("mcp__"):
+        return name
+    if match := _MCP_NAMESPACED_TOOL_NAME.match(name):
+        return match.group("tool")
+    return name
 
 
 def _suppress_third_party_warnings() -> None:
@@ -468,6 +491,10 @@ def _apply_tool_search_transform(mcp_instance: Any, config: dict[str, Any]) -> N
 
             Use this to execute tools discovered via search_tools.
             """
+            # Accept both bare names ("list_charts") and namespaced names
+            # ("mcp__superset__list_charts") — some MCP bridges forward the
+            # fully-qualified client-side name.
+            name = _strip_tool_namespace(name)
             if name in {transform._call_tool_name, transform._search_tool_name}:
                 raise ValueError(
                     f"'{name}' is a synthetic search tool and cannot be "

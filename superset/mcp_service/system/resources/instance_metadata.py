@@ -60,6 +60,7 @@ def get_instance_metadata_resource() -> str:
         from superset.mcp_service.system.system_utils import (
             calculate_dashboard_breakdown,
             calculate_database_breakdown,
+            calculate_feature_availability,
             calculate_instance_summary,
             calculate_popular_content,
             calculate_recent_activity,
@@ -82,6 +83,7 @@ def get_instance_metadata_resource() -> str:
                 "dashboard_breakdown": calculate_dashboard_breakdown,
                 "database_breakdown": calculate_database_breakdown,
                 "popular_content": calculate_popular_content,
+                "feature_availability": calculate_feature_availability,
             },
             time_windows={
                 "recent": 7,
