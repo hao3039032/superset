@@ -138,6 +138,32 @@ export default function transformProps(
     legendState,
   } = chartProps;
 
+  let customEchartOptions;
+  try {
+    // Parse custom EChart options safely using AST analysis
+    // This replaces the unsafe `new Function()` approach with a secure parser
+    // that only allows static data structures (no function callbacks)
+    customEchartOptions = safeParseEChartOptions(_echartOptions);
+  } catch (_) {
+    customEchartOptions = undefined;
+  }
+  // legend.selected from custom options acts as the initial default selection;
+  // after the user interacts with the legend (non-empty runtime legendState),
+  // the user's selections take precedence over the configured defaults so a
+  // hidden-by-default series can be re-selected.
+  const hasUserLegendState =
+    !!legendState && Object.keys(legendState).length > 0;
+  const customLegendSelected =
+    customEchartOptions?.legend && !Array.isArray(customEchartOptions.legend)
+      ? customEchartOptions.legend.selected
+      : undefined;
+  // Legend visibility is intentionally NOT passed to the totals/labels
+  // helpers below (extractDataTotalValues / extractShowValueIndexes /
+  // transformSeries): their keys are raw data column keys, while legend
+  // names here carry a metric prefix (e.g. "sum__num, girl"), so any map
+  // passed in misses every key and would exclude all series from totals.
+  // Aligning the two namespaces needs a key translation (deferred).
+
   let focusedSeries: string | null = null;
 
   const {
@@ -673,7 +699,7 @@ export default function transformProps(
     convertInteger(xAxisTitleMargin),
   );
 
-  const { setDataMask = () => {}, onContextMenu } = hooks;
+  const { setDataMask = () => {}, onContextMenu, onLegendStateChanged } = hooks;
   const alignTicks = yAxisIndex !== yAxisIndexB;
 
   const echartOptions: EChartsCoreOption = {
@@ -876,19 +902,16 @@ export default function transformProps(
     focusedSeries = seriesName;
   };
 
-  let customEchartOptions;
-  try {
-    // Parse custom EChart options safely using AST analysis
-    // This replaces the unsafe `new Function()` approach with a secure parser
-    // that only allows static data structures (no function callbacks)
-    customEchartOptions = safeParseEChartOptions(_echartOptions);
-  } catch (_) {
-    customEchartOptions = undefined;
-  }
-
   const mergedEchartOptions = customEchartOptions
     ? mergeCustomEChartOptions(echartOptions, customEchartOptions)
     : echartOptions;
+
+  if (customLegendSelected && hasUserLegendState) {
+    const legendOption = mergedEchartOptions.legend as {
+      selected?: Record<string, boolean>;
+    };
+    legendOption.selected = { ...customLegendSelected, ...legendState };
+  }
 
   return {
     formData,
@@ -904,6 +927,7 @@ export default function transformProps(
     seriesBreakdown: rawSeriesA.length,
     selectedValues: filterState.selectedValues || [],
     onContextMenu,
+    onLegendStateChanged,
     onFocusedSeries,
     xValueFormatter: tooltipFormatter,
     xAxis: {

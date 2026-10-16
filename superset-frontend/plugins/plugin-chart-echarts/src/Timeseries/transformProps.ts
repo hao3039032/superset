@@ -37,6 +37,7 @@ import {
   isIntervalAnnotationLayer,
   isPhysicalColumn,
   isTimeseriesAnnotationLayer,
+  LegendState,
   resolveAutoCurrency,
   TimeseriesChartDataResponseResult,
   TimeseriesDataRecord,
@@ -196,6 +197,26 @@ export default function transformProps(
     legendIndex,
   } = chartProps;
 
+  let customEchartOptions;
+  try {
+    // Parse custom EChart options safely using AST analysis
+    // This replaces the unsafe `new Function()` approach with a secure parser
+    // that only allows static data structures (no function callbacks)
+    customEchartOptions = safeParseEChartOptions(_echartOptions);
+  } catch (_) {
+    customEchartOptions = undefined;
+  }
+  // legend.selected from custom options acts as the initial default selection;
+  // after the user interacts with the legend (non-empty runtime legendState),
+  // the user's selections take precedence over the configured defaults so a
+  // hidden-by-default series can be re-selected.
+  const hasUserLegendState =
+    !!legendState && Object.keys(legendState).length > 0;
+  const customLegendSelected =
+    customEchartOptions?.legend && !Array.isArray(customEchartOptions.legend)
+      ? customEchartOptions.legend.selected
+      : undefined;
+
   let focusedSeries: string | null = null;
 
   const {
@@ -299,13 +320,30 @@ export default function transformProps(
     xAxisLabel = verboseMap[xAxisLabel];
   }
   const isHorizontal = orientation === OrientationType.Horizontal;
+  // Visibility used by totals/labels computations. Series-name consumers such
+  // as extractDataTotalValues treat an unlisted key as hidden, while custom
+  // legend.selected is a partial map where unlisted series stay visible — so
+  // expand the custom defaults over the data series keys (unlisted or `true`
+  // stays visible, explicit `false` is hidden). The user's runtime state is
+  // already a full map from the legend event payload.
+  const dataSeriesNames = Array.from(
+    new Set(rebasedData.flatMap(datum => Object.keys(datum))),
+  ).filter(name => name !== xAxisLabel);
+  const effectiveLegendState = hasUserLegendState
+    ? legendState
+    : customLegendSelected
+      ? dataSeriesNames.reduce((acc, name) => {
+          acc[name] = customLegendSelected[name] !== false;
+          return acc;
+        }, {} as LegendState)
+      : undefined;
   const { totalStackedValues, thresholdValues } = extractDataTotalValues(
     rebasedData,
     {
       stack,
       percentageThreshold,
       xAxisCol: xAxisLabel,
-      legendState,
+      legendState: effectiveLegendState,
     },
   );
   const extraMetricLabels = extractExtraMetrics(chartProps.rawFormData).map(
@@ -341,7 +379,7 @@ export default function transformProps(
     stack,
     onlyTotal,
     isHorizontal,
-    legendState,
+    legendState: effectiveLegendState,
   });
   const seriesContexts = extractForecastSeriesContexts(
     rawSeries.map(series => series.name as string),
@@ -485,7 +523,7 @@ export default function transformProps(
         markerSize,
         areaOpacity: opacity,
         seriesType,
-        legendState,
+        legendState: effectiveLegendState,
         stack,
         formatter: forcePercentFormatter
           ? percentFormatter
@@ -1184,19 +1222,16 @@ export default function transformProps(
     focusedSeries = seriesName;
   };
 
-  let customEchartOptions;
-  try {
-    // Parse custom EChart options safely using AST analysis
-    // This replaces the unsafe `new Function()` approach with a secure parser
-    // that only allows static data structures (no function callbacks)
-    customEchartOptions = safeParseEChartOptions(_echartOptions);
-  } catch (_) {
-    customEchartOptions = undefined;
-  }
-
   const mergedEchartOptions = customEchartOptions
     ? mergeCustomEChartOptions(echartOptions, customEchartOptions)
     : echartOptions;
+
+  if (customLegendSelected && hasUserLegendState) {
+    const legendOption = mergedEchartOptions.legend as {
+      selected?: Record<string, boolean>;
+    };
+    legendOption.selected = { ...customLegendSelected, ...legendState };
+  }
 
   return {
     echartOptions: mergedEchartOptions,

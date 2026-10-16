@@ -46,6 +46,7 @@ export default function EchartsMixedTimeseries({
   seriesBreakdown,
   onContextMenu,
   onFocusedSeries,
+  onLegendStateChanged,
   xValueFormatter,
   xAxis,
   refs,
@@ -138,6 +139,15 @@ export default function EchartsMixedTimeseries({
     },
     mouseover: params => {
       onFocusedSeries(params.seriesName);
+    },
+    legendselectchanged: payload => {
+      onLegendStateChanged?.(payload.selected);
+    },
+    legendselectall: payload => {
+      onLegendStateChanged?.(payload.selected);
+    },
+    legendinverseselect: payload => {
+      onLegendStateChanged?.(payload.selected);
     },
     contextmenu: async eventParams => {
       if (onContextMenu) {

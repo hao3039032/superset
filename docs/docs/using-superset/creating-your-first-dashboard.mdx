@@ -323,7 +323,7 @@ When Auto-detect is active, each row uses the currency code from the designated 
 
 For ECharts-based chart types (line, bar, area, scatter, pie, and others), Explore includes an advanced **ECharts Option Editor** that accepts raw JSON overrides for the underlying ECharts configuration.
 
-Access it via the **Customize** tab → **ECharts Options** section at the bottom of the panel. The JSON you enter is deep-merged on top of Superset's generated ECharts config, so you can override specific options without rewriting the entire config.
+Access it via the **Customize** tab → **ECharts Options** section at the bottom of the panel. The JSON you enter is deep-merged on top of Superset's generated ECharts config (arrays are replaced entirely), so you can override specific options without rewriting the entire config.
 
 **Example:** override the legend position and add a custom title:
 
@@ -333,6 +333,34 @@ Access it via the **Customize** tab → **ECharts Options** section at the botto
   "title": { "text": "My Custom Title", "left": "center" }
 }
 ```
+
+#### Hiding Series by Default
+
+On time-series charts (Line, Smooth Line, Bar, Area, Step, and Mixed), set `legend.selected` to hide specific series when the chart first loads. Keys are the series names shown in the legend (after verbose-name and label formatting):
+
+```json
+{ "legend": { "selected": { "Series A": false } } }
+```
+
+The selection acts as a *default*: viewers can still click the legend item to reveal the series, and once they do, their choice wins until the dashboard page is reloaded (data refreshes and auto-refresh keep the current choices; only a full page reload restores the configured defaults). Series not listed in the map stay visible. Write `legend` as an object — an array form replaces the built-in legend entirely and the default-hiding integration described here does not apply to the array form. Every `selected` value must be a boolean: a non-boolean value (e.g. a string) makes the whole ECharts Options object invalid, silently dropping all other customizations on that chart.
+
+Legend clicking is unavailable on some configurations: charts colored by primary axis (grouped by nothing) and compact charts with a hidden legend disable legend selection, so hidden-by-default series cannot be re-selected there.
+
+#### Setting a Default Data Zoom Window
+
+On time-series charts with **Data Zoom** enabled, provide a full `dataZoom` array to control the initial window. The array replaces Superset's built-in `dataZoom` entries, so include all three entries (the slider plus the two inside handlers) and keep **Data Zoom** checked so the grid keeps space for the slider:
+
+```json
+{
+  "dataZoom": [
+    { "type": "slider", "start": 70, "end": 100, "bottom": 30 },
+    { "type": "inside", "yAxisIndex": 0, "zoomOnMouseWheel": false, "moveOnMouseWheel": true },
+    { "type": "inside", "xAxisIndex": 0, "zoomOnMouseWheel": false, "moveOnMouseWheel": true }
+  ]
+}
+```
+
+`start`/`end` are percentages (0–100). On horizontal-oriented charts, add `"yAxisIndex": 0` to the slider entry. The three-entry recipe matches the built-in `dataZoom` of Line/Smooth Line/Bar/Area/Step; Mixed (Dual Axis) only ships a slider by default, so pasting the full array there still works (array replacement) but additionally enables wheel-pan zoom its built-in config does not have. Note that redrawing the chart (for example via cross-filtering or a width change) resets the zoom window to these configured defaults rather than to the full range.
 
 :::caution
 ECharts option overrides bypass Superset's validation layer. Invalid option keys are silently ignored by ECharts. Overrides that conflict with Superset-generated options (e.g., `series`) may produce unexpected results.

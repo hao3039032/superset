@@ -1520,3 +1520,106 @@ test('should assign distinct dash patterns for multiple time offsets consistentl
   // must be different patterns
   expect(symbol1).not.toEqual(symbol2);
 });
+
+describe('custom legend selected defaults (echart_options)', () => {
+  const echartOptionsString =
+    "{ legend: { selected: { 'San Francisco': false, 'New York': false } } }";
+
+  test('applies legend.selected defaults when legendState is unset', () => {
+    const chartProps = createTestChartProps({
+      formData: { echartOptions: echartOptionsString },
+    });
+    const transformed = transformProps(chartProps);
+
+    expect((transformed.echartOptions.legend as any).selected).toEqual({
+      'San Francisco': false,
+      'New York': false,
+    });
+  });
+
+  test('user legendState overrides defaults for touched series and keeps defaults for untouched series', () => {
+    const chartProps = {
+      ...createTestChartProps({
+        formData: { echartOptions: echartOptionsString },
+      }),
+      legendState: { 'San Francisco': true },
+    } as EchartsTimeseriesChartProps;
+    const transformed = transformProps(chartProps);
+
+    expect((transformed.echartOptions.legend as any).selected).toEqual({
+      'San Francisco': true, // user re-enabled this series
+      'New York': false, // untouched series keeps the configured default
+    });
+  });
+
+  test('legend.selected is untouched when no custom legend options are set', () => {
+    const chartProps = {
+      ...createTestChartProps({}),
+      legendState: { 'San Francisco': false, 'New York': true },
+    } as EchartsTimeseriesChartProps;
+    const transformed = transformProps(chartProps);
+
+    expect((transformed.echartOptions.legend as any).selected).toEqual({
+      'San Francisco': false,
+      'New York': true,
+    });
+  });
+
+  test('applies runtime legendState when echartOptions is the default empty object', () => {
+    const chartProps = {
+      ...createTestChartProps({ formData: { echartOptions: '{}' } }),
+      legendState: { 'San Francisco': false, 'New York': true },
+    } as EchartsTimeseriesChartProps;
+    const transformed = transformProps(chartProps);
+
+    expect((transformed.echartOptions.legend as any).selected).toEqual({
+      'San Francisco': false,
+      'New York': true,
+    });
+  });
+
+  test('stacked totals exclude series hidden by legend.selected defaults', () => {
+    // Three series so the visible-stack total (12) differs from both the
+    // full total (13) and any single series max (6) — this keeps the
+    // assertion sensitive to unlisted-series regressions: if unlisted
+    // (visible) series were wrongly dropped from the totals, the max would
+    // fall back to the data max (6) instead of 12.
+    const stackedQueriesData: ChartDataResponseResult[] = [
+      createTestQueryData(
+        createTestData(
+          [
+            { 'San Francisco': 1, 'New York': 6, Boston: 6 },
+            { 'San Francisco': 1, 'New York': 6, Boston: 6 },
+          ],
+          { intervalMs: 300000000 },
+        ),
+      ),
+    ];
+    const baseConfig = {
+      queriesData: stackedQueriesData,
+      formData: {
+        ...baseFormDataHorizontalBar,
+        stack: StackControlsValue.Stack,
+      },
+    };
+
+    // Without custom legend defaults, the row totals are 13 per point, so the
+    // stacked axis max clamps to the full stack total.
+    const full = transformProps(createTestChartProps(baseConfig));
+    expect((full.echartOptions.xAxis as any).max).toBe(13);
+
+    // Hiding only 'San Francisco' by default must drop just it from the
+    // stacked totals: 6 + 6 = 12 (the unlisted series stay visible and the
+    // single-series max is 6, so a wrong fallback would show 6, not 12).
+    const hidden = transformProps(
+      createTestChartProps({
+        ...baseConfig,
+        formData: {
+          ...baseConfig.formData,
+          echartOptions: "{ legend: { selected: { 'San Francisco': false } } }",
+        },
+      }),
+    );
+    expect((hidden.echartOptions.xAxis as any).max).toBe(12);
+  });
+});

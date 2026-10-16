@@ -496,3 +496,72 @@ test('should add a formula annotation when X-axis column has dataset-level label
   expect(Array.isArray(formulaSeries?.data)).toBe(true);
   expect((formulaSeries!.data as unknown[]).length).toBeGreaterThan(0);
 });
+
+describe('custom legend selected defaults (echart_options)', () => {
+  const echartOptionsString =
+    "{ legend: { selected: { 'sum__num, girl': false, 'sum__num, boy': false } } }";
+
+  test('applies legend.selected defaults when legendState is unset', () => {
+    const chartProps = createEchartsTimeseriesTestChartProps<
+      EchartsMixedTimeseriesFormData,
+      EchartsMixedTimeseriesProps
+    >({
+      ...MIXED_TIMESERIES_CHART_PROPS_DEFAULTS,
+      defaultQueriesData: queriesData,
+      formData: { ...formData, echartOptions: echartOptionsString },
+      queriesData,
+    });
+    const transformed = transformProps(chartProps);
+
+    expect((transformed.echartOptions.legend as any).selected).toEqual({
+      'sum__num, girl': false,
+      'sum__num, boy': false,
+    });
+  });
+
+  test('user legendState overrides defaults for touched series and keeps defaults for untouched series', () => {
+    const baseChartProps = createEchartsTimeseriesTestChartProps<
+      EchartsMixedTimeseriesFormData,
+      EchartsMixedTimeseriesProps
+    >({
+      ...MIXED_TIMESERIES_CHART_PROPS_DEFAULTS,
+      defaultQueriesData: queriesData,
+      formData: { ...formData, echartOptions: echartOptionsString },
+      queriesData,
+    });
+    const chartProps = {
+      ...baseChartProps,
+      legendState: { 'sum__num, girl': true },
+    } as EchartsMixedTimeseriesProps;
+    const transformed = transformProps(chartProps);
+
+    expect((transformed.echartOptions.legend as any).selected).toEqual({
+      'sum__num, girl': true, // user re-enabled this series
+      'sum__num, boy': false, // untouched series keeps the configured default
+    });
+  });
+
+  test('passes onLegendStateChanged from hooks so legend clicks persist', () => {
+    const onLegendStateChanged = jest.fn();
+    const baseChartProps = createEchartsTimeseriesTestChartProps<
+      EchartsMixedTimeseriesFormData,
+      EchartsMixedTimeseriesProps
+    >({
+      ...MIXED_TIMESERIES_CHART_PROPS_DEFAULTS,
+      defaultQueriesData: queriesData,
+      formData: { ...formData },
+      queriesData,
+    });
+    const chartProps = {
+      ...baseChartProps,
+      hooks: {
+        setDataMask: jest.fn(),
+        onContextMenu: undefined,
+        onLegendStateChanged,
+      },
+    } as EchartsMixedTimeseriesProps;
+    const transformed = transformProps(chartProps);
+
+    expect(transformed.onLegendStateChanged).toBe(onLegendStateChanged);
+  });
+});

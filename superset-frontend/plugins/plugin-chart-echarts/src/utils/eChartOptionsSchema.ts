@@ -222,6 +222,8 @@ export const legendSchema = z.object({
   lineStyle: lineStyleSchema.optional(),
   textStyle: textStyleSchema.optional(),
   icon: symbolTypeSchema.optional(),
+  /** Initial selection state per series name; series not listed stay selected */
+  selected: z.record(z.string(), z.boolean()).optional(),
   selectedMode: z
     .union([z.boolean(), z.enum(['single', 'multiple', 'series'])])
     .optional(),

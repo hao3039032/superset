@@ -80,3 +80,55 @@ and dashboard placement; also check missing/invalid credentials remain rejected.
 Check Web health and that the other containers have not restarted. For rollback,
 restore the previous MCP image in Compose and recreate only `superset-mcp`.
 No metadata downgrade is needed for this source-only backport.
+
+## Frontend changes
+
+Backend-only patches keep the fast path above: the deploy-mcp image just
+copies `superset/` over a frozen base, and the base still carries the official
+6.1.0 frontend assets. Any change under `superset-frontend/` breaks that
+assumption: the browser loads chart code from the Web image, so the frontend
+must be rebuilt and Web (and any worker serving assets) must roll too.
+
+The flow for a frontend change:
+
+1. Build the base dev image from the repository root `Dockerfile` at the
+   merged commit (its node:20 stage runs `npm ci` + `npm run build`). Target
+   the `dev` stage explicitly — the default final stage is `showtime` (lean
+   dependency set), while `docker/Dockerfile.deploy-lwutil` expects a `dev`
+   base:
+   `docker build --target dev -f Dockerfile -t superset-local:6.1-lw-fe1 .`
+   Tag immutably (`-fe1`, `-fe2`, ...) per frontend batch; the build is large
+   and slow, so batch frontend patches together.
+2. Rebuild the Web/workers overlay on the new base:
+   `docker build -f docker/Dockerfile.deploy-lwutil --build-arg BASE=superset-local:6.1-lw-fe1 -t <deploy-tag> .`
+3. Rebuild the MCP image on the step-2 overlay image via
+   `--build-arg BASE_IMAGE=<deploy-tag>` so both images share one patched
+   source tree; verify the image ID with `docker inspect` as usual. The base
+   must be dependency-complete: `docker/Dockerfile.deploy-mcp` only copies
+   Python source and installs nothing, and the step-1 `dev` image lacks
+   `clickhouse-connect` and `numexpr` and pins the dev-only `fastmcp` 3.1.0 —
+   using it here would produce an MCP image whose ClickHouse charts fail to
+   load their dialect.
+4. Update `x-superset-image` for the Web/workers services in
+   `docker-compose-image-tag.yml` and the MCP image reference, then recreate
+   the affected services. Save the previous Compose file and image IDs first.
+   This is the one case where the "Web, workers... retain their existing
+   deployment" rule from the intro is intentionally broken; PostgreSQL and
+   Redis still do not roll.
+5. Smoke checks in addition to the backend list: a chart configured with
+   `legend.selected` in its ECharts Options loads with the series hidden and
+   can be re-selected by clicking the legend; charts without custom options
+   render unchanged; a configured default `dataZoom` window opens as
+   documented. Before rollout, also audit saved charts whose ECharts Options
+   already contain `legend.selected`: those settings were silently dropped
+   by the old schema and will start hiding series once this frontend ships —
+   and any entries whose value is not a boolean (e.g. a string) now make the
+   whole custom-options object invalid, silently dropping all other
+   customizations; fix those values during the audit.
+   Verify the chart bundle actually changed by checking the asset
+   hash in the browser (a stale CDN/browser cache can mask a missing rollout).
+
+After a frontend roll, subsequent backend-only patches go back to the fast
+path, but their `BASE_IMAGE` default in `docker/Dockerfile.deploy-mcp` must be
+advanced to the new verified snapshot tag so Python-only rebuilds stay
+consistent with the deployed frontend.
