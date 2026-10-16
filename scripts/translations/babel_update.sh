@@ -50,7 +50,7 @@ pybabel extract \
   -k _ -k __ -k t -k tn:1,2 -k tct .
 
 # Normalize .pot file
-msgcat --sort-by-msgid --no-wrap --no-location superset/translations/messages.pot -o superset/translations/messages.pot
+msgcat --sort-output --no-wrap --no-location superset/translations/messages.pot -o superset/translations/messages.pot
 
 cat $LICENSE_TMP superset/translations/messages.pot > messages.pot.tmp \
   && mv messages.pot.tmp superset/translations/messages.pot

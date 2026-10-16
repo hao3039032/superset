@@ -114,10 +114,10 @@ CMD ["/app/docker/entrypoints/run-server.sh"]
 
 ## Key ARGs in Dockerfile
 
-- `BUILD_TRANSLATIONS`: whether to build the translations into the image. For the
-  frontend build this tells webpack to strip out all locales other than `en` from
-  the `moment-timezone` library. For the backendthis skips compiling the
-  `*.po` translation files
+- `BUILD_TRANSLATIONS` (default `true`): whether to build the translations
+  (frontend `messages.json` and backend `messages.mo`) into the image. Pass
+  `--build-arg BUILD_TRANSLATIONS=false` to skip compiling the `*.po`
+  translation files and keep the image English-only
 - `DEV_MODE`: whether to skip the frontend build, this is used by our `docker-compose` dev setup
   where we mount the local volume and build using `webpack` in `--watch` mode, meaning as you
   alter the code in the local file system, webpack, from within a docker image used for this

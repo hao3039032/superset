@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Superset\n"
 "Report-Msgid-Bugs-To: dkrat7 @github.com\n"
-"POT-Creation-Date: 2026-02-06 23:58-0800\n"
+"POT-Creation-Date: 2026-10-15 15:05+0800\n"
 "PO-Revision-Date: 2024-10-05 23:46+0200\n"
 "Last-Translator: dkrat7 <dkrat7 @github.com>\n"
 "Language: sl_SI\n"
@@ -27,7 +27,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 msgid ""
 "\n"
@@ -275,6 +275,14 @@ msgstr ""
 "Ponovno preverite poizvedbo.\n"
 "Izjema: %(ex)s"
 
+#, fuzzy, python-format
+msgid "%s %s"
+msgstr "%s%s"
+
+#, fuzzy, python-format
+msgid "%s ENCRYPTED EXTRA"
+msgstr "Dodatna varnost"
+
 #, python-format
 msgid "%s Error"
 msgstr "%s napaka"
@@ -319,9 +327,41 @@ msgstr "URL"
 msgid "%s aggregates(s)"
 msgstr "Agreg. funkcije: %s"
 
+#, fuzzy, python-format
+msgid "%s column"
+msgid_plural "%s columns"
+msgstr[0] "Stolpci: %s"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #, python-format
 msgid "%s column(s)"
 msgstr "Stolpci: %s"
+
+#, fuzzy, python-format
+msgid "%s day ago"
+msgid_plural "%s days ago"
+msgstr[0] "1 day ago"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, fuzzy, python-format
+msgid "%s hr ago"
+msgid_plural "%s hr ago"
+msgstr[0] "%s vrstica"
+msgstr[1] "%s vrstici"
+msgstr[2] "%s vrstice"
+msgstr[3] "%s vrstic"
+
+#, fuzzy, python-format
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] "Možnosti: %s"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #, fuzzy, python-format
 msgid "%s item(s)"
@@ -334,6 +374,22 @@ msgid ""
 msgstr ""
 "%s elementov ni mogoče označiti, ker nimate pravic za urejanje vseh "
 "izbranih elementov."
+
+#, fuzzy, python-format
+msgid "%s metric"
+msgid_plural "%s metrics"
+msgstr[0] "Mera za razvrščanje"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, fuzzy, python-format
+msgid "%s min ago"
+msgid_plural "%s min ago"
+msgstr[0] "1 month ago"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #, python-format
 msgid "%s operator(s)"
@@ -351,12 +407,40 @@ msgstr[3] "%s možnosti"
 msgid "%s option(s)"
 msgstr "Možnosti: %s"
 
+#, fuzzy, python-format
+msgid "%s out of %s column"
+msgid_plural "%s out of %s columns"
+msgstr[0] "Prilagodi stolpce"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, fuzzy, python-format
+msgid "%s out of %s metric"
+msgid_plural "%s out of %s metrics"
+msgstr[0] "Mera za razvrščanje"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, fuzzy, python-format
+msgid "%s out of %s selected"
+msgstr "Izbranih: %s"
+
 #, python-format
 msgid "%s recipients"
 msgstr "%s prejemnikov"
 
 #, fuzzy, python-format
 msgid "%s record"
+msgid_plural "%s records..."
+msgstr[0] "%s napaka"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, fuzzy, python-format
+msgid "%s record..."
 msgid_plural "%s records..."
 msgstr[0] "%s napaka"
 msgstr[1] ""
@@ -371,9 +455,25 @@ msgstr[1] "%s vrstici"
 msgstr[2] "%s vrstice"
 msgstr[3] "%s vrstic"
 
+#, fuzzy, python-format
+msgid "%s s ago"
+msgid_plural "%s s ago"
+msgstr[0] "30 days ago"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #, python-format
 msgid "%s saved metric(s)"
 msgstr "Shranjene mere: %s"
+
+#, fuzzy, python-format
+msgid "%s second"
+msgid_plural "%s seconds"
+msgstr[0] "5 second"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #, fuzzy, python-format
 msgid "%s tab selected"
@@ -448,6 +548,10 @@ msgstr ""
 "-- Opomba: Če ne shranite poizvedbe, se ti zavihki NE bodo ohranili, ko "
 "boste počistili piškote ali zamenjali brskalnik.\n"
 "\n"
+
+#, fuzzy, python-format
+msgid "... and %d more"
+msgstr "... in %s drugih"
 
 #, python-format
 msgid "... and %s others"
@@ -708,6 +812,14 @@ msgstr ""
 msgid "A JavaScript function that generates an icon configuration object"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"A JavaScript object that adheres to the ECharts options specification, "
+"overriding other control options with higher precedence. (i.e. { title: {"
+" text: \"My Chart\" }, tooltip: { trigger: \"item\" } }). Details: "
+"https://echarts.apache.org/en/option.html. "
+msgstr ""
+
 #, fuzzy
 msgid "A comma separated list of columns that should be parsed as dates"
 msgstr "Izberite stolpce, ki bodo prepoznani kot datumi"
@@ -724,6 +836,7 @@ msgstr "Podatkovna baza z enakim imenom že obstaja."
 msgid "A date is required when using custom date shift"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "A dictionary with column names and their data types if you need to change"
 " the defaults. Example: {\"user_id\":\"int\"}. Check Python's Pandas "
@@ -844,6 +957,10 @@ msgstr ""
 " kategorične bodisi časovne."
 
 #, fuzzy
+msgid "A-Z"
+msgstr "a - ž"
+
+#, fuzzy
 msgid "AND"
 msgstr "naključno"
 
@@ -858,6 +975,14 @@ msgstr "AQE"
 
 msgid "AUG"
 msgstr "AVG"
+
+#, fuzzy
+msgid "Aborted"
+msgstr "Začetek"
+
+#, fuzzy
+msgid "Aborting"
+msgstr "Delam"
 
 msgid "About"
 msgstr "O programu"
@@ -1343,6 +1468,10 @@ msgstr "Vsi grafikoni"
 msgid "All charts/global scoping"
 msgstr "Vsi grafikoni/globalni doseg"
 
+#, fuzzy
+msgid "All dimensions"
+msgstr "Dimenzije"
+
 msgid "All filters"
 msgstr "Vsi filtri"
 
@@ -1544,6 +1673,10 @@ msgstr "Pri pridobivanju CSS predlog je prišlo do napake"
 msgid "An error occurred while fetching chart owners values: %s"
 msgstr "Pri pridobivanju polja lastnik grafikona je prišlo do napake: %s"
 
+#, fuzzy, python-format
+msgid "An error occurred while fetching created by values: %s"
+msgstr "Pri pridobivanju vrednosti shem je prišlo do napake: %s"
+
 #, python-format
 msgid "An error occurred while fetching dashboard owner values: %s"
 msgstr "Pri pridobivanju polja lastnik nadzorne plošče je prišlo do napake: %s"
@@ -1599,6 +1732,10 @@ msgid "An error occurred while fetching tab state"
 msgstr "Pri pridobivanju stanja zavihka je prišlo do napake"
 
 msgid "An error occurred while fetching table metadata"
+msgstr "Pri pridobivanju metapodatkov tabele je prišlo do napake"
+
+#, fuzzy, python-format
+msgid "An error occurred while fetching table metadata for %s"
 msgstr "Pri pridobivanju metapodatkov tabele je prišlo do napake"
 
 msgid ""
@@ -1842,6 +1979,10 @@ msgstr ""
 "Dodate lahko katerokoli podatkovno bazo, ki podpira konekcije z "
 "SQLAlchemy URI-ji. Naučite se, kako povezati gonilnik podatkovne baze "
 
+#, fuzzy
+msgid "Append"
+msgstr "Konec"
+
 #, python-format
 msgid "Applied cross-filters (%d)"
 msgstr "Uporabljeni medsebojni filtri (%d)"
@@ -1864,6 +2005,12 @@ msgid ""
 msgstr ""
 "Izbrano drseče okno ni vrnilo podatkov. Poskrbite, da izvorna poizvedba "
 "ustreza minimalni periodi drsečega okna."
+
+msgid ""
+"Applies only when \"Cell bars\" formatting is selected: the background of"
+" the histogram columns is displayed if the \"Show cell bars\" flag is "
+"enabled."
+msgstr ""
 
 msgid "Apply"
 msgstr "Uporabi"
@@ -1962,9 +2109,6 @@ msgstr "Ali ste prepričani, da želite izbrisati izbrane poizvedbe?"
 msgid "Are you sure you want to overwrite this dataset?"
 msgstr "Ali ste prepričani, da želite prepisati podatkovni set?"
 
-msgid "Are you sure you want to proceed?"
-msgstr "Ali želite nadaljevati?"
-
 msgid ""
 "Are you sure you want to remove the system dark theme? The application "
 "will fall back to the configuration file dark theme."
@@ -2014,10 +2158,6 @@ msgstr ""
 msgid "Arrow"
 msgstr "Puščica"
 
-#, fuzzy
-msgid "Ascending"
-msgstr "Razvrsti naraščajoče"
-
 msgid "Assign a set of parameters as"
 msgstr "Določi nabor parametrov kot"
 
@@ -2046,6 +2186,18 @@ msgstr "Samodejno"
 
 msgid "Auto Zoom"
 msgstr "Samodejna povečava"
+
+#, python-format
+msgid "Auto refresh paused (set to %s seconds)"
+msgstr ""
+
+#, python-format
+msgid "Auto refresh paused - tab inactive (set to %s seconds)"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Auto refresh set to %s seconds"
+msgstr "Nastavitve datoteke"
 
 #, fuzzy
 msgid "Auto-detect"
@@ -2097,6 +2249,10 @@ msgstr "Povprečje"
 
 msgid "Average value"
 msgstr "Povprečna vrednost"
+
+#, fuzzy
+msgid "Awaiting filter selection"
+msgstr "Invertiraj izbiro"
 
 msgid "Axis"
 msgstr "Os"
@@ -2431,6 +2587,12 @@ msgstr "CSS predloge"
 msgid "CSS applied to the chart"
 msgstr "CSS slogi uporabljeni za grafikon"
 
+msgid ""
+"CSS styles may be removed by server-side HTML sanitization. If styles are"
+" not applying, ask your Superset administrator to adjust the HTML "
+"sanitization configuration."
+msgstr ""
+
 msgid "CSS template"
 msgstr "CSS predloga"
 
@@ -2542,8 +2704,15 @@ msgstr "Dovoli izbiro več vrednosti"
 msgid "Cancel"
 msgstr "Prekliči"
 
+#, fuzzy
+msgid "Cancel Task"
+msgstr "Prekliči"
+
 msgid "Cancel query on window unload event"
 msgstr "Prekini poizvedbo pri dogodku zaprtja okna (window unload event)"
+
+msgid "Cancellation not available due to missing abort handler"
+msgstr ""
 
 msgid "Cannot access the query"
 msgstr "Dostop do poizvedbe ni mogoč"
@@ -2730,6 +2899,10 @@ msgstr "Spreminjanje tega podatkovnega vira ni dovoljeno"
 
 msgid "Changing this report is forbidden"
 msgstr "Spreminjanje tega poročila ni dovoljeno"
+
+#, fuzzy
+msgid "Changing this task is forbidden"
+msgstr "Spreminjanje tega podatkovnega seta ni dovoljeno"
 
 msgid "Character to interpret as decimal point"
 msgstr "Znak, ki bo prepoznan kot decimalno ločilo"
@@ -3179,6 +3352,10 @@ msgid "Code Copied!"
 msgstr "SQL kopiran!"
 
 #, fuzzy
+msgid "Collapse"
+msgstr "Skrij vrstico"
+
+#, fuzzy
 msgid "Collapse All"
 msgstr "Skrči vse"
 
@@ -3200,6 +3377,14 @@ msgstr "Barva"
 msgid "Color +/-"
 msgstr "Barva +/-"
 
+#, fuzzy
+msgid "Color By X-Axis"
+msgstr "Barva glede na"
+
+#, fuzzy
+msgid "Color By Y-Axis"
+msgstr "Barva glede na"
+
 msgid "Color Metric"
 msgstr "Mera za barvo"
 
@@ -3212,6 +3397,12 @@ msgstr "Barvna shema"
 
 msgid "Color Steps"
 msgstr "Barvni koraki"
+
+msgid "Color bars by x-axis"
+msgstr ""
+
+msgid "Color bars by y-axis"
+msgstr ""
 
 msgid "Color bounds"
 msgstr "Barvne meje"
@@ -3332,7 +3523,15 @@ msgid "Columns (%s)"
 msgstr "Stolpci: %s"
 
 #, fuzzy
+msgid "Columns (horizontal layout)"
+msgstr "Vodoravno (zgoraj)"
+
+#, fuzzy
 msgid "Columns and metrics"
+msgstr " za dodajanje mer"
+
+#, fuzzy
+msgid "Columns and metrics should be inside folders"
 msgstr " za dodajanje mer"
 
 msgid "Columns folder can only contain column items"
@@ -3345,6 +3544,9 @@ msgstr "V podatkovnem viru manjkajo stolpci: %(invalid_columns)s"
 #, python-format
 msgid "Columns missing in datasource: %(invalid_columns)s"
 msgstr "V podatkovnem viru manjkajo stolpci: %(invalid_columns)s"
+
+msgid "Columns should be inside folders"
+msgstr ""
 
 msgid "Columns subtotal position"
 msgstr "Položaj delnih vsot stolpcev"
@@ -3378,6 +3580,9 @@ msgstr "Opis glave stolpca"
 
 msgid "Combine metrics"
 msgstr "Združuj mere"
+
+msgid "Comma \",\""
+msgstr ""
 
 msgid ""
 "Comma-separated color picks for the intervals, e.g. 1,2,4. Integers "
@@ -3581,10 +3786,6 @@ msgstr "Prispevek"
 msgid "Contribution Mode"
 msgstr "Način prikaza deležev"
 
-#, fuzzy
-msgid "Contributions"
-msgstr "Prispevek"
-
 msgid "Control"
 msgstr "Nadzor"
 
@@ -3596,6 +3797,10 @@ msgstr "Kontrolniki imenovani "
 
 msgid "Copied to clipboard!"
 msgstr "Kopirano na odložišče!"
+
+#, fuzzy
+msgid "Copied!"
+msgstr "SQL kopiran!"
 
 msgid "Copy"
 msgstr "Kopiraj"
@@ -3615,6 +3820,10 @@ msgstr "Kopiraj in prilepi JSON prijavne podatke"
 #, fuzzy
 msgid "Copy code to clipboard"
 msgstr "Kopiraj na odložišče"
+
+#, fuzzy
+msgid "Copy column name"
+msgstr "Ime stolpca"
 
 #, python-format
 msgid "Copy of %s"
@@ -3756,12 +3965,6 @@ msgstr "Ustvarite indeks dataframe-a"
 msgid "Create dataset"
 msgstr "Ustvarite podatkovni set"
 
-msgid "Create matrix columns by placing charts side-by-side"
-msgstr ""
-
-msgid "Create matrix rows by stacking charts vertically"
-msgstr ""
-
 msgid "Create new chart"
 msgstr "Ustvarite nov grafikon"
 
@@ -3776,6 +3979,10 @@ msgstr "Ustvaril"
 
 msgid "Created by me"
 msgstr "Ustvarjeno z moje strani"
+
+#, fuzzy, python-format
+msgid "Created by: %s"
+msgstr "Ustvaril"
 
 msgid "Created on"
 msgstr "Ustvarjeno"
@@ -3829,6 +4036,10 @@ msgid "Currency symbol"
 msgstr "Simbol valute"
 
 msgid "Current"
+msgstr "Tekoči"
+
+#, fuzzy
+msgid "Current Zoom"
 msgstr "Tekoči"
 
 msgid "Current day"
@@ -3892,6 +4103,10 @@ msgstr "Poljubna širina zaslonske slike v pikslih"
 #, fuzzy
 msgid "Custom..."
 msgstr "Prilagojen"
+
+#, fuzzy
+msgid "Customization and styling"
+msgstr "Tip vizualizacije"
 
 #, fuzzy
 msgid "Customization type"
@@ -4082,6 +4297,10 @@ msgstr ""
 msgid "Dashboard title"
 msgstr "Ime nadzorne plošče"
 
+#, fuzzy, python-format
+msgid "Dashboard updated %s"
+msgstr "Zadnja posodobitev %s"
+
 msgid "Dashboard usage"
 msgstr "Uporaba nadzorne plošče"
 
@@ -4212,6 +4431,10 @@ msgstr "Gesla podatkovne baze"
 
 msgid "Database port"
 msgstr "Vrata podatkovne baze"
+
+#, fuzzy
+msgid "Database reference is not allowed on a report"
+msgstr "Shema podatkovne baze ne dovoljuje nalaganje csv-datotek."
 
 msgid "Database schema is not allowed for csv uploads."
 msgstr "Shema podatkovne baze ne dovoljuje nalaganje csv-datotek."
@@ -4572,6 +4795,14 @@ msgstr ""
 "Določa, če se na začetku, na sredini ali na koncu pojavi stopnica med "
 "dvema točkama"
 
+#, python-format
+msgid "Delayed (missed %s refresh)"
+msgid_plural "Delayed (missed %s refreshes)"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 msgid "Delete"
 msgstr "Izbriši"
 
@@ -4657,7 +4888,7 @@ msgstr "Izbrišite ta okvir in shranite za odpravo tega sporočila."
 msgid "Delete user"
 msgstr "Izbriši poizvedbo"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Delete user registration"
 msgstr "Izbrisano: %s"
 
@@ -4805,10 +5036,6 @@ msgstr "Gostota"
 
 msgid "Dependent on"
 msgstr "Odvisen od"
-
-#, fuzzy
-msgid "Descending"
-msgstr "Razvrsti padajoče"
 
 msgid "Description"
 msgstr "Opis"
@@ -5103,6 +5330,10 @@ msgid ""
 "manually select columns and metrics."
 msgstr ""
 
+#, fuzzy
+msgid "Drag to reorder"
+msgstr "Surovi podatki"
+
 msgid "Draw a marker on data points. Only applicable for line types."
 msgstr "Nariši markerje na točke grafikona. Samo za črtne grafikone."
 
@@ -5285,6 +5516,9 @@ msgstr ""
 
 msgid "ECharts"
 msgstr "ECharts"
+
+msgid "ECharts Options (JS object literals)"
+msgstr ""
 
 msgid "EMAIL_REPORTS_CTA"
 msgstr "EMAIL_REPORTS_CTA"
@@ -5484,6 +5718,9 @@ msgstr "Vgrajevanje deaktivirano."
 msgid "Emphasis"
 msgstr "Poudari"
 
+msgid "Empty Strings \"\""
+msgstr ""
+
 msgid "Empty circle"
 msgstr "Prazen krog"
 
@@ -5526,9 +5763,6 @@ msgstr "Omogoči napovedovanje"
 msgid "Enable graph roaming"
 msgstr "Omogoči preoblikovanje grafikona"
 
-msgid "Enable horizontal layout (columns)"
-msgstr ""
-
 msgid "Enable icon JavaScript mode"
 msgstr ""
 
@@ -5543,6 +5777,9 @@ msgstr ""
 msgid "Enable labels"
 msgstr "Oznake razponov"
 
+msgid "Enable matrixify"
+msgstr ""
+
 msgid "Enable node dragging"
 msgstr "Omogoči premikanje vozlišč"
 
@@ -5556,9 +5793,6 @@ msgid "Enable server side pagination of results (experimental feature)"
 msgstr ""
 "Omogoči številčenje strani rezultatov na strani strežnika (funkcija v "
 "razvoju)"
-
-msgid "Enable vertical layout (rows)"
-msgstr ""
 
 msgid "Enables custom icon configuration via JavaScript"
 msgstr ""
@@ -5579,6 +5813,10 @@ msgid ""
 msgstr ""
 "Prišlo je do neveljavnega NULL prostorskega vnosa,"
 "                                        poskusite ga izločiti s filtrom"
+
+#, fuzzy
+msgid "Encrypted extra fields"
+msgstr "Polja deljenih poizvedb"
 
 msgid "End"
 msgstr "Konec"
@@ -5723,6 +5961,14 @@ msgstr "Pri pridobivanju označenih elementov je prišlo do napake"
 
 #, fuzzy, python-format
 msgid "Error deleting %s"
+msgstr "Napaka pri pridobivanju podatkov: %s"
+
+#, python-format
+msgid "Error disabling fullscreen: %s"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Error enabling fullscreen: %s"
 msgstr "Napaka pri pridobivanju podatkov: %s"
 
 #, fuzzy
@@ -5915,6 +6161,10 @@ msgstr "Razširi podatkovni panel"
 msgid "Expand row"
 msgstr "Razširi vrstico"
 
+#, fuzzy
+msgid "Expand row to edit"
+msgstr "Razširi vrstico"
+
 msgid ""
 "Expects a formula with depending time parameter 'x'\n"
 "        in milliseconds since epoch. mathjs is used to evaluate the "
@@ -6033,6 +6283,9 @@ msgstr "Dimenzije"
 msgid "Extent"
 msgstr "nedavno"
 
+msgid "External link warning"
+msgstr ""
+
 msgid "Extra"
 msgstr "Dodatno"
 
@@ -6045,6 +6298,7 @@ msgstr "Dodatni parametri"
 msgid "Extra data for JS"
 msgstr "Dodatni podatki za JS"
 
+#, python-brace-format
 msgid ""
 "Extra data to specify table metadata. Currently supports metadata of the "
 "format: `{ \"certification\": { \"certified_by\": \"Data Platform Team\","
@@ -6088,6 +6342,10 @@ msgstr "Faktor"
 msgid "Factor to multiply the metric by"
 msgstr "Faktor, s katerim množite mero"
 
+#, fuzzy
+msgid "Fail"
+msgstr "ni uspelo"
+
 msgid "Fail login count"
 msgstr ""
 
@@ -6100,15 +6358,16 @@ msgstr "Napaka pri pridobivanju rezultatov"
 msgid "Failed to apply theme: Invalid JSON"
 msgstr ""
 
+#, fuzzy
+msgid "Failed to copy stack trace to clipboard"
+msgstr "Kopiraj na odložišče"
+
 msgid "Failed to create report"
 msgstr "Ustvarjanje poročila nesupešno"
 
 #, python-format
 msgid "Failed to execute %(query)s"
 msgstr "Neuspešno izvajanje %(query)s"
-
-msgid "Failed to fetch user info:"
-msgstr ""
 
 msgid "Failed to generate chart edit URL"
 msgstr "Neuspešno ustvarjanje URL za urejanje grafikona"
@@ -6196,6 +6455,10 @@ msgstr "Je FALSE"
 msgid "Favorite"
 msgstr "Priljubljeno"
 
+#, fuzzy
+msgid "Feature Not Enabled"
+msgstr "SSH-tunel ni omogočen"
+
 msgid "Featured"
 msgstr "Ustvarjene"
 
@@ -6215,6 +6478,10 @@ msgstr "Pridobljeno %s"
 msgid "Fetching"
 msgstr "Pridobivam"
 
+#, fuzzy
+msgid "Fetching data..."
+msgstr "pridobivanje"
+
 #, python-format
 msgid "Field cannot be decoded by JSON. %(json_error)s"
 msgstr "Polja ni mogoče dekodirati z JSON. %(json_error)s"
@@ -6222,6 +6489,10 @@ msgstr "Polja ni mogoče dekodirati z JSON. %(json_error)s"
 #, python-format
 msgid "Field cannot be decoded by JSON. %(msg)s"
 msgstr "Polja ni mogoče dekodirati z JSON. %(msg)s"
+
+#, fuzzy
+msgid "Field cannot be empty."
+msgstr "ne sme biti prazno"
 
 msgid "Field is required"
 msgstr "Polje je obvezno"
@@ -6460,6 +6731,9 @@ msgstr "Sila"
 msgid "Force Time Grain as Max Interval"
 msgstr ""
 
+msgid "Force abort (stops task for all subscribers)"
+msgstr ""
+
 msgid ""
 "Force all tables and views to be created in this schema when clicking "
 "CTAS or CVAS in SQL Lab."
@@ -6518,6 +6792,7 @@ msgstr "Oblikuj SQL"
 msgid "Format SQL query"
 msgstr "Oblikuj SQL"
 
+#, python-brace-format
 msgid ""
 "Format data labels. Use variables: {name}, {value}, {percent}. \\n "
 "represents a new line. ECharts compatibility:\n"
@@ -6544,6 +6819,14 @@ msgid "Formatted value"
 msgstr "Oblikovana vrednost"
 
 msgid "Formatting"
+msgstr "Oblikovanje"
+
+#, fuzzy
+msgid "Formatting column"
+msgstr "Oblikovanje"
+
+#, fuzzy
+msgid "Formatting object"
 msgstr "Oblikovanje"
 
 msgid "Formula"
@@ -6575,6 +6858,10 @@ msgstr "Začetni datum ne sme biti večji od končnega"
 
 msgid "Full name"
 msgstr "Celotno ime"
+
+#, fuzzy
+msgid "Fullscreen is not supported in this browser."
+msgstr "Vrtanje po še ni podprto za grafikon tega tipa"
 
 msgid "Funnel Chart"
 msgstr "Lijakasti grafikon"
@@ -6685,6 +6972,10 @@ msgid "Grid"
 msgstr "Mreža"
 
 msgid "Grid Size"
+msgstr "Velikost mreže"
+
+#, fuzzy
+msgid "Grid view"
 msgstr "Velikost mreže"
 
 #, fuzzy
@@ -6806,10 +7097,6 @@ msgstr "Vodoravno (zgoraj)"
 
 msgid "Horizontal alignment"
 msgstr "Vodoravna poravnava"
-
-#, fuzzy
-msgid "Horizontal layout (columns)"
-msgstr "Vodoravno (zgoraj)"
 
 msgid "Host"
 msgstr "Gostitelj"
@@ -6981,6 +7268,10 @@ msgid "In"
 msgstr "Vsebuje (IN)"
 
 #, fuzzy
+msgid "In Progress"
+msgstr "Napredek"
+
+#, fuzzy
 msgid "In Range"
 msgstr "Časovno obdobje"
 
@@ -7141,6 +7432,10 @@ msgid "Invalid JSON"
 msgstr "Neveljaven JSON"
 
 #, fuzzy
+msgid "Invalid JSON configuration"
+msgstr "Neveljavna nastavitev zemljepisne dolžine/širine."
+
+#, fuzzy
 msgid "Invalid JSON metadata"
 msgstr "JSON-metapodatki"
 
@@ -7253,8 +7548,8 @@ msgstr "Neveljavna prostorska točka: %(latlong)s"
 msgid "Invalid state."
 msgstr "Neveljavno stanje."
 
-#, python-format
-msgid "Invalid tab ids: %s(tab_ids)"
+#, fuzzy, python-format
+msgid "Invalid tab ids: %(tab_ids)s"
 msgstr "Neveljavni id-ji zavihkov: %s(tab_ids)"
 
 #, fuzzy
@@ -7540,6 +7835,10 @@ msgstr "Zadnje četrletje"
 msgid "Last run"
 msgstr "Zadnji zagon"
 
+#, fuzzy, python-format
+msgid "Last updated %s ago"
+msgstr "Zadnja posodobitev %s"
+
 msgid "Last week"
 msgstr "Zadnji teden"
 
@@ -7779,6 +8078,10 @@ msgstr "Seznam vrednosti, ki bodo markirane s trikotniki"
 msgid "List updated"
 msgstr "Seznam posodobljen"
 
+#, fuzzy
+msgid "List view"
+msgstr "Število razdelitev"
+
 msgid "Live render"
 msgstr "Sprotni izris"
 
@@ -7792,8 +8095,16 @@ msgstr "Naloženo v predpomnilnik"
 msgid "Loaded from cache"
 msgstr "Naloženo iz predpomnilnika"
 
+#, fuzzy
+msgid "Loading"
+msgstr "Nalagam ..."
+
 msgid "Loading deck.gl layers..."
 msgstr ""
+
+#, fuzzy
+msgid "Loading filter values"
+msgstr "Razvrsti vrednosti filtra"
 
 #, fuzzy
 msgid "Loading timezones..."
@@ -8196,11 +8507,13 @@ msgstr ""
 msgid "Metrics"
 msgstr "Mere"
 
-#, fuzzy
-msgid "Metrics / Dimensions"
-msgstr "Dimenzija"
+msgid "Metrics can't be used for both rows and columns at the same time"
+msgstr ""
 
 msgid "Metrics folder can only contain metric items"
+msgstr ""
+
+msgid "Metrics should be inside folders"
 msgstr ""
 
 #, fuzzy
@@ -8293,6 +8606,10 @@ msgstr "Minute %s"
 msgid "Missing OAuth2 token"
 msgstr ""
 
+#, fuzzy
+msgid "Missing URL parameter"
+msgstr "Manjkajo parametri URL-ja"
+
 msgid "Missing URL parameters"
 msgstr "Manjkajo parametri URL-ja"
 
@@ -8350,6 +8667,10 @@ msgstr "Več filtrov"
 
 msgid "MotherDuck token"
 msgstr "Žeton za MotherDuck"
+
+#, fuzzy
+msgid "Move icon"
+msgstr "Samo premikanje"
 
 msgid "Move only"
 msgstr "Samo premikanje"
@@ -8523,7 +8844,7 @@ msgstr "%s še ne obstajajo"
 msgid "No Data"
 msgstr "Ni podatkov"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "No Logs yet"
 msgstr "%s še ne obstajajo"
 
@@ -8693,6 +9014,10 @@ msgstr ""
 msgid "No table columns"
 msgstr "Ni stolpcev tabel"
 
+#, fuzzy
+msgid "No tasks yet"
+msgstr "%s še ne obstajajo"
+
 msgid "No temporal columns found"
 msgstr "Ni najdenih časovnih stolpcev"
 
@@ -8786,7 +9111,7 @@ msgstr "Ne vsebuje (NOT IN)"
 msgid "Not null"
 msgstr "Ni null (IS NOT NULL)"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Not set"
 msgstr "%s še ne obstajajo"
 
@@ -8998,6 +9323,9 @@ msgstr "Veljavno samo, ko \"Tip oznake\" ni procent."
 msgid "Only applies when \"Label Type\" is set to show values."
 msgstr "Veljavno samo, ko je izbran \"Tip oznake\" za prikaz vrednosti."
 
+msgid "Only proceed if you trust the destination or its source."
+msgstr ""
+
 msgid ""
 "Only show the total value on the stacked chart, and not show on the "
 "selected category"
@@ -9138,6 +9466,10 @@ msgstr "Ostalo"
 
 msgid "Other color palettes"
 msgstr "Druge barvne palete"
+
+#, fuzzy
+msgid "Out of tab"
+msgstr "% celote"
 
 msgid "Outdoors"
 msgstr "Outdoors"
@@ -9336,6 +9668,17 @@ msgstr "Sem prilepite žeton za dostop"
 msgid "Pattern"
 msgstr "Vzorec"
 
+msgid "Pause auto refresh if tab is inactive"
+msgstr ""
+
+#, fuzzy
+msgid "Pause auto-refresh"
+msgstr "Nastavi interval samodejnega osveževanja"
+
+#, fuzzy
+msgid "Pending"
+msgstr "v teku"
+
 #, fuzzy
 msgid "Per user caching"
 msgstr "Procentualna sprememba"
@@ -9471,6 +9814,13 @@ msgid "Pin to the result panel"
 msgstr ""
 
 #, fuzzy
+msgid "Pin to top"
+msgstr "Od vrha proti dnu"
+
+msgid "Pipe \"|\""
+msgstr ""
+
+#, fuzzy
 msgid "Pivot Mode"
 msgstr "načinu urejanja"
 
@@ -9580,7 +9930,7 @@ msgstr "Prosim, potrdite"
 msgid "Please enter your username"
 msgstr "Ime vaše poizvedbe"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Please fix the following errors"
 msgstr "Imamo naslednje ključe: %s"
 
@@ -9761,6 +10111,10 @@ msgstr "Meje primarne y-osi"
 
 msgid "Primary y-axis format"
 msgstr "Oblika primarne y-osi"
+
+#, fuzzy
+msgid "Private"
+msgstr "Privatni ključ"
 
 msgid "Private Channels (Bot in channel)"
 msgstr "Zasebni kanali (Bot na kanalu)"
@@ -10009,6 +10363,10 @@ msgstr "Ponovno pridobi rezultate"
 msgid "Refresh dashboard"
 msgstr "Osveži nadzorno ploščo"
 
+#, fuzzy
+msgid "Refresh delayed"
+msgstr "Osveži nadzorno ploščo"
+
 msgid "Refresh frequency"
 msgstr "Frekvenca osveževanja"
 
@@ -10101,6 +10459,14 @@ msgstr "Osveži privzete vrednosti"
 
 msgid "Remove cross-filter"
 msgstr "Odstrani medsebojne filtre"
+
+#, fuzzy
+msgid "Remove customization"
+msgstr "Tip vizualizacije"
+
+#, fuzzy
+msgid "Remove filter"
+msgstr "Odstrani element"
 
 msgid "Remove item"
 msgstr "Odstrani element"
@@ -10275,11 +10641,11 @@ msgstr ""
 msgid "Reset columns"
 msgstr "Izberite stolpec"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Reset my password"
 msgstr "%s GESLO"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "Reset password"
 msgstr "%s GESLO"
 
@@ -10319,11 +10685,19 @@ msgstr ""
 "konfiguriran."
 
 #, fuzzy
+msgid "Resume auto-refresh"
+msgstr "Nastavi interval samodejnega osveževanja"
+
+#, fuzzy
 msgid "Retry"
 msgstr "Avtor"
 
 msgid "Retry fetching results"
 msgstr "Ponovno pridobi rezultate"
+
+#, fuzzy
+msgid "Return to Superset"
+msgstr "Vrne datum-čas."
 
 msgid "Return to specific datetime."
 msgstr "Vrne datum-čas."
@@ -10460,6 +10834,10 @@ msgstr "Omejitev števila vrstic"
 
 msgid "Rows"
 msgstr "Vrstice"
+
+#, fuzzy
+msgid "Rows (vertical layout)"
+msgstr "Navpično (levo)"
 
 msgid "Rows per page, 0 means no pagination"
 msgstr "Vrstic na stran (0 pomeni brez številčenja strani)"
@@ -10827,10 +11205,26 @@ msgstr "Iskanje mer in stolpcev"
 msgid "Search box"
 msgstr "Iskalno polje"
 
+#, fuzzy
+msgid "Search by"
+msgstr "Iskalno polje"
+
 msgid "Search by query text"
 msgstr "Išči po vsebini poizvedbe"
 
+#, fuzzy
+msgid "Search calculated columns by name"
+msgstr "Izračunani stolpci"
+
+#, fuzzy
+msgid "Search charts by name, owner, or dashboard"
+msgstr "V nadzorni plošči ni grafikonov"
+
 msgid "Search columns"
+msgstr "Iskanje stolpcev"
+
+#, fuzzy
+msgid "Search columns by name"
 msgstr "Iskanje stolpcev"
 
 #, fuzzy
@@ -10839,6 +11233,10 @@ msgstr "Iskanje stolpcev"
 
 msgid "Search in filters"
 msgstr "Iskanje v filtrih"
+
+#, fuzzy
+msgid "Search metrics by key or label"
+msgstr "Iskanje mer in stolpcev"
 
 #, fuzzy
 msgid "Search owners"
@@ -11044,6 +11442,10 @@ msgstr "Izberite barvno shemo"
 msgid "Select column"
 msgstr "Izberite stolpec"
 
+#, fuzzy
+msgid "Select column name"
+msgstr "Izberite stolpec"
+
 msgid ""
 "Select columns that will be displayed in the table. You can multiselect "
 "columns."
@@ -11139,6 +11541,10 @@ msgstr ""
 msgid "Select layers to hide"
 msgstr "Izberite grafikon za uporabo"
 
+#, fuzzy
+msgid "Select object name"
+msgstr "Izberite zadevo"
+
 msgid ""
 "Select one or many metrics to display, that will be displayed in the "
 "percentages of total. Percentage metrics will be calculated only from "
@@ -11177,6 +11583,10 @@ msgid "Select page size"
 msgstr "Izberite oznake"
 
 #, fuzzy
+msgid "Select permissions"
+msgstr "Verzija"
+
+#, fuzzy
 msgid "Select roles"
 msgstr "Izberite lastnike"
 
@@ -11186,8 +11596,9 @@ msgstr "Izberite shranjene mere"
 msgid "Select saved queries"
 msgstr "Izberite shranjene poizvedbe"
 
-msgid "Select schema or type to search schemas"
-msgstr "Izberite ali vnesite ime sheme"
+#, fuzzy
+msgid "Select schema"
+msgstr "Izberite shemo"
 
 msgid "Select scheme"
 msgstr "Izberite shemo"
@@ -11277,12 +11688,19 @@ msgstr ""
 "Izberite vrednosti v osvetljenih poljih na levi strani kontrolnika in "
 "zaženite poizvedbo z gumbom %s."
 
+#, fuzzy
+msgid "Selected"
+msgstr "0 izbranih"
+
 msgid "Selecting a database is required"
 msgstr "Izbira podatkovne baze je obvezna"
 
 #, fuzzy
 msgid "Selection method"
 msgstr "Izberite način dostave"
+
+msgid "Semicolon \";\""
+msgstr ""
 
 msgid "Send as CSV"
 msgstr "Pošlji kot CSV"
@@ -11433,6 +11851,10 @@ msgstr "Deli grafikon po e-pošti"
 msgid "Share permalink by email"
 msgstr "Deli povezavo po e-pošti"
 
+#, fuzzy
+msgid "Shared"
+msgstr "Deljenje"
+
 msgid "Shared query"
 msgstr "Deljene poizvedbe"
 
@@ -11506,6 +11928,10 @@ msgstr "Prikaži imena mer"
 
 msgid "Show Range Filter"
 msgstr "Prikaži filter obdobja"
+
+#, fuzzy
+msgid "Show SQL"
+msgstr "Prikaži dnevnik"
 
 msgid "Show Timestamp"
 msgstr "Prikaži časovno značko"
@@ -11800,6 +12226,15 @@ msgstr ""
 msgid "Solid"
 msgstr "Zapolnjen"
 
+msgid "Some groups could not be resolved and are shown as IDs."
+msgstr ""
+
+msgid "Some permissions could not be resolved and are shown as IDs."
+msgstr ""
+
+msgid "Some required filters on other tabs have values and will not be cleared"
+msgstr ""
+
 msgid "Some roles do not exist"
 msgstr "Nekatere vloge ne obstajajo"
 
@@ -11901,6 +12336,10 @@ msgstr "Razvrščanje po"
 msgid "Sort by metric"
 msgstr "Mera za razvrščanje"
 
+#, fuzzy
+msgid "Sort by original table order"
+msgstr "Vrstni red stolpcev izvorne tabele"
+
 msgid "Sort columns alphabetically"
 msgstr "Razvrsti stolpce po abecedi"
 
@@ -11923,10 +12362,6 @@ msgstr "Prikaži legendo"
 
 msgid "Sort metric"
 msgstr "Mera za razvrščanje"
-
-#, fuzzy
-msgid "Sort order"
-msgstr "Razvrščanje serij"
 
 msgid "Sort query by"
 msgstr "Razvrščanje poizvedbe po"
@@ -12151,6 +12586,10 @@ msgid "Submit"
 msgstr "Pošlji"
 
 #, fuzzy
+msgid "Subscribers"
+msgstr "Kategorija"
+
+#, fuzzy
 msgid "Subtitle"
 msgstr "Naslov zavihka"
 
@@ -12296,6 +12735,9 @@ msgstr "ČET"
 msgid "TUE"
 msgstr "TOR"
 
+msgid "Tab \"\\t\""
+msgstr ""
+
 msgid "Tab name"
 msgstr "Naslov zavihka"
 
@@ -12424,6 +12866,42 @@ msgstr "Kategorija cilja"
 msgid "Target value"
 msgstr "Ciljna vrednost"
 
+#, fuzzy
+msgid "Task"
+msgstr "oznake"
+
+#, fuzzy, python-format
+msgid "Task cancelled: %s"
+msgstr "Poročilo ni uspelo"
+
+#, fuzzy
+msgid "Task could not be aborted."
+msgstr "Oznake ni mogoče posodobiti."
+
+#, fuzzy
+msgid "Task could not be created."
+msgstr "Oznake ni mogoče ustvariti."
+
+#, fuzzy
+msgid "Task could not be updated."
+msgstr "Oznake ni mogoče posodobiti."
+
+msgid ""
+"Task is not abortable. The task is in progress but has not registered an "
+"abort handler."
+msgstr ""
+
+#, fuzzy
+msgid "Task parameters are invalid."
+msgstr "Parametri oznak so neveljavni."
+
+#, fuzzy
+msgid "Tasks"
+msgstr "oznake"
+
+msgid "Tasks will appear here as background operations are executed."
+msgstr ""
+
 msgid "Template"
 msgstr "Predloga"
 
@@ -12505,6 +12983,18 @@ msgstr ""
 "interaktivne poligone, črte in točke (krogi, ikone in/ali besedila)."
 
 msgid ""
+"The Global Task Framework is not enabled. Please contact your "
+"administrator to enable the GLOBAL_TASK_FRAMEWORK feature flag."
+msgstr ""
+
+msgid ""
+"The Global Task Framework is not enabled. Set GLOBAL_TASK_FRAMEWORK=True "
+"in your feature flags to use @task. See "
+"https://superset.apache.org/docs/configuration/async-queries-celery for "
+"configuration details."
+msgstr ""
+
+msgid ""
 "The Sankey chart visually tracks the movement and transformation of "
 "values across\n"
 "          system stages. Nodes represent stages, connected by links "
@@ -12553,6 +13043,9 @@ msgid ""
 msgstr ""
 "Kategorija izvornih vozlišč, na podlagi katere je določena barva. Če je "
 "vozlišče povezano z več kot eno kategorijo, bo uporabljena samo prva."
+
+msgid "The chart is still loading. Please wait a moment and try again."
+msgstr ""
 
 msgid ""
 "The classic. Great for showing how much of a company each investor gets, "
@@ -12772,6 +13265,11 @@ msgid ""
 "%(columns)s. "
 msgstr "V 'columns' manjkajo naslednji vnosi iz 'series_columns': %(columns)s. "
 
+msgid ""
+"The following fields contain sensitive information that was masked during"
+" export. Please provide the values to import this database."
+msgstr ""
+
 #, python-format
 msgid ""
 "The following filters have the 'Select first filter value by default'\n"
@@ -12876,6 +13374,7 @@ msgstr ""
 "Metadata_params v polju Dodatno niso pravilno nastavljeni. Ključ %(key)s "
 "je neveljaven."
 
+#, python-brace-format
 msgid ""
 "The metadata_params in Extra field is not configured correctly. The key "
 "%{key}s is invalid."
@@ -13029,16 +13528,8 @@ msgstr ""
 "nastavitvah podatkovne baze nista prisotni v izvoženih datotekah in jih "
 "je potrebno dodati ročno po uvozu, če je to potrebno."
 
-msgid ""
-"The passwords for the databases below are needed in order to import them."
-" Please note that the \"Secure Extra\" and \"Certificate\" sections of "
-"the database configuration are not present in explore files and should be"
-" added manually after the import if they are needed."
+msgid "The passwords for the databases below are needed in order to import them."
 msgstr ""
-"Gesla za spodnje podatkovne baze so potrebna za njihov uvoz. Sekciji "
-"\"Dodatna varnost\" in \"Certifikati\" v nastavitvah podatkovne baze "
-"nista prisotni v izvoženih datotekah in jih je potrebno dodati ročno po "
-"uvozu, če je to potrebno."
 
 msgid "The pattern of timestamp format. For strings use "
 msgstr "Format zapisa časovne značke. Za znakovne nize uporabite "
@@ -13397,6 +13888,11 @@ msgstr "Debelina črt"
 msgid "Theme"
 msgstr "Čas"
 
+# SUPERSET UI
+#, fuzzy
+msgid "Theme colors"
+msgstr "Čas"
+
 #, fuzzy
 msgid "Theme imported"
 msgstr "Podatki uvoženi"
@@ -13456,6 +13952,12 @@ msgstr ""
 "Za to komponento ni dovolj prostora. Poskusite zmanjšati širino ali pa "
 "povečati širino cilja."
 
+#, python-format
+msgid ""
+"There was a problem refreshing your dashboard. We'll try again in %s, as "
+"scheduled."
+msgstr ""
+
 #, fuzzy
 msgid "There was an error creating the group. Please, try again."
 msgstr "Napaka pri nalaganju shem"
@@ -13484,6 +13986,14 @@ msgstr "Napaka pri pridobivanju statusa \"Priljubljeno\": %s"
 
 msgid "There was an error fetching the filtered charts and dashboards:"
 msgstr "Napaka pri pridobivanju filtriranih grafikonov in nadzornih plošč:"
+
+#, fuzzy
+msgid "There was an error loading groups."
+msgstr "Napaka pri nalaganju tabel"
+
+#, fuzzy
+msgid "There was an error loading permissions."
+msgstr "Napaka pri nalaganju tabel"
 
 msgid "There was an error loading the catalogs"
 msgstr "Napaka pri nalaganju katalogov"
@@ -13521,11 +14031,23 @@ msgid "There was an error updating the user. Please, try again."
 msgstr "Napaka pri nalaganju shem"
 
 #, fuzzy
+msgid "There was an error while fetching groups"
+msgstr "Pri pridobivanju podatkovnega seta je prišlo do napake"
+
+#, fuzzy
+msgid "There was an error while fetching permissions"
+msgstr "Pri pridobivanju podatkovnega seta je prišlo do napake"
+
+#, fuzzy
 msgid "There was an error while fetching users"
 msgstr "Pri pridobivanju podatkovnega seta je prišlo do napake"
 
 msgid "There was an error with your request"
 msgstr "Pri zahtevi je prišlo do napake"
+
+#, fuzzy, python-format
+msgid "There was an issue cancelling the task: %s"
+msgstr "Težava pri brisanju %s: %s"
 
 #, fuzzy, python-format
 msgid "There was an issue deleting %s"
@@ -13589,7 +14111,7 @@ msgstr "Pri dupliciranju izbranih podatkovnih setov je prišlo do težave: %s"
 msgid "There was an issue exporting the database"
 msgstr "Pri dupliciranju podatkovnega seta je prišlo do težave."
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "There was an issue exporting the selected charts"
 msgstr "Pri brisanju izbranih grafikonov je prišlo do težave: %s"
 
@@ -13597,18 +14119,18 @@ msgstr "Pri brisanju izbranih grafikonov je prišlo do težave: %s"
 msgid "There was an issue exporting the selected dashboards"
 msgstr "Pri brisanju izbranih nadzornih plošč je prišlo do težave: "
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "There was an issue exporting the selected datasets"
 msgstr "Pri brisanju izbranih podatkovnih setov je prišlo do težave: %s"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "There was an issue exporting the selected themes"
 msgstr "Pri brisanju izbranih predlog je prišlo do težave: %s"
 
 msgid "There was an issue favoriting this dashboard."
 msgstr "Pri uvrščanju nadzorne plošče med priljubljene je prišlo do težave."
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "There was an issue fetching reports."
 msgstr "Prišlo je do napake pri pridobivanju grafikona: %s"
 
@@ -13754,14 +14276,6 @@ msgstr ""
 "Upravlja ali je polje časovne granulacije iz trenutnega pogleda lahko\n"
 "                  posredovano grafikonu, ki vsebuje podatke oznak slojev."
 
-#, python-format
-msgid ""
-"This dashboard is currently auto refreshing; the next auto refresh will "
-"be in %s."
-msgstr ""
-"Nadzorna plošča se trenutno samodejno osvežuje. Naslednja samodejna "
-"osvežitev bo čez %s."
-
 msgid "This dashboard is managed externally, and can't be edited in Superset"
 msgstr ""
 "Nadzorna plošča se upravlja eksterno in je ni mogoče urediti znotraj "
@@ -13821,6 +14335,13 @@ msgid ""
 "table."
 msgstr "Tabela podatkovne baze ne vsebuje podatkov. Izberite drugo tabelo."
 
+msgid ""
+"This database uses OAuth2 for authentication. Please click the link above"
+" to grant Apache Superset permission to access the data. Your personal "
+"access token will be stored encrypted and used only for queries run by "
+"you."
+msgstr ""
+
 msgid "This dataset is managed externally, and can't be edited in Superset"
 msgstr ""
 "Podatkovni set se upravlja eksterno in ga ni mogoče urediti znotraj "
@@ -13861,10 +14382,10 @@ msgstr "Ta filter je lahko nekompatibilen s trenutnim podatkovnim setom"
 msgid "This folder is currently empty"
 msgstr ""
 
-msgid "This folder only accepts columns"
+msgid "This folder only supports columns"
 msgstr ""
 
-msgid "This folder only accepts metrics"
+msgid "This folder only supports metrics"
 msgstr ""
 
 msgid "This functionality is disabled in your environment for security reasons."
@@ -13917,6 +14438,11 @@ msgstr ""
 "Ta JSON objekt opisuje postavitev pripomočkov na nadzorni plošči. Ustvari"
 " se dinamično, ko prilagajamo velikost in postavitev pripomočkov z "
 "uporabo povleci&spusti v pogledu nadzorne plošče"
+
+msgid ""
+"This link will take you to an external website. We cannot guarantee the "
+"safety of external destinations."
+msgstr ""
 
 msgid "This markdown component has an error."
 msgstr "Markdown komponenta ima napako."
@@ -14010,6 +14536,10 @@ msgstr[1] "To je bilo sproženo z:"
 msgstr[2] "To je bilo sproženo z:"
 msgstr[3] "To je bilo sproženo z:"
 
+#, python-format
+msgid "This will abort (stop) the task for all %s subscriber(s)."
+msgstr ""
+
 msgid ""
 "This will be applied to the whole table. Arrows (↑ and ↓) will be added "
 "to main columns for increase and decrease. Basic conditional formatting "
@@ -14018,6 +14548,9 @@ msgstr ""
 "To bo uporabljeno za celotno tabelo. Puščici (↑ in ↓) bosta dodani "
 "glavnim stolpcem za povečevanje in zmanjševanje. Osnovno pogojno "
 "oblikovanje, lahko spremenite s pogojnim oblikovanjem spodaj."
+
+msgid "This will cancel the task."
+msgstr ""
 
 msgid "This will remove your current embed configuration."
 msgstr "To bo odstranilo trenutno konfiguracijo za vgrajevanje."
@@ -14206,8 +14739,18 @@ msgid "Time-series Table"
 msgstr "Tabela s časovno vrsto"
 
 #, fuzzy
+msgid "Timed Out"
+msgstr "Oblika zapisa časa"
+
+#, fuzzy
 msgid "Timeline"
 msgstr "Časovni pas"
+
+#, python-format
+msgid ""
+"Timeout configured (%s seconds) but no abort handler defined. Task will "
+"continue running past the timeout."
+msgstr ""
 
 msgid "Timeout error"
 msgstr "Napaka pretečenega časa"
@@ -14248,18 +14791,11 @@ msgid ""
 "clicking the column header."
 msgstr ""
 
-msgid "To entire row"
-msgstr ""
-
 msgid "To filter on a metric, use Custom SQL tab."
 msgstr "Za filtriranje po meri uporabite zavihek za SQL-izraz."
 
 msgid "To get a readable URL for your dashboard"
 msgstr "Za pridobitev berljivega URL-ja za nadzorno ploščo"
-
-#, fuzzy
-msgid "To text color"
-msgstr "Ciljna barva"
 
 msgid "Token Request URI"
 msgstr ""
@@ -14404,6 +14940,9 @@ msgstr "Prireži dolge celice na \"min. širino\" nastavljeno zgoraj"
 msgid "Truncates the specified date to the accuracy specified by the date unit."
 msgstr "Zaokroži datum-čas, glede na definirano časovno enoto."
 
+msgid "Trust this URL and don't ask again"
+msgstr ""
+
 msgid "Try applying different filters or ensuring your datasource has data"
 msgstr ""
 "Poskusite uporabiti druge filtre oz. zagotovite, da so v podatkovnem viru"
@@ -14475,6 +15014,17 @@ msgid ""
 " account: \"BigQuery Data Viewer\", \"BigQuery Metadata Viewer\", "
 "\"BigQuery Job User\" and the following permissions are set "
 "\"bigquery.readsessions.create\", \"bigquery.readsessions.getData\""
+msgstr ""
+"Povezava neuspešna. Preverite če so v servisnem računu nastavljene "
+"naslednje vloge: \"BigQuery Data Viewer\", \"BigQuery Metadata Viewer\", "
+"\"BigQuery Job User\" in so nastavljena naslednja dovoljenja: "
+"\"bigquery.readsessions.create\", \"bigquery.readsessions.getData\""
+
+#, fuzzy
+msgid ""
+"Unable to connect. Verify that the following roles are set on the service"
+" account: \"Cloud Datastore Viewer\", \"Cloud Datastore User\", \"Cloud "
+"Datastore Creator\""
 msgstr ""
 "Povezava neuspešna. Preverite če so v servisnem računu nastavljene "
 "naslednje vloge: \"BigQuery Data Viewer\", \"BigQuery Metadata Viewer\", "
@@ -14618,6 +15168,9 @@ msgstr "Neznana napaka"
 msgid "Unknown input format"
 msgstr "Neznana oblika vnosa"
 
+msgid "Unknown tokens will be highlighted as warnings."
+msgstr ""
+
 msgid "Unknown type"
 msgstr "Neznan tip"
 
@@ -14627,6 +15180,12 @@ msgstr "Neznana vrednost"
 #, fuzzy
 msgid "Unpin"
 msgstr "v teku"
+
+msgid "Unpin from the result panel"
+msgstr ""
+
+msgid "Unpin from top"
+msgstr ""
 
 #, python-format
 msgid "Unsafe return type for function %(func)s: %(value_type)s"
@@ -14674,6 +15233,10 @@ msgstr "Ni definirano"
 
 msgid "Update"
 msgstr "Posodobi"
+
+#, fuzzy
+msgid "Update auto-refresh"
+msgstr "Nastavi interval samodejnega osveževanja"
 
 msgid "Update chart"
 msgstr "Posodobi grafikon"
@@ -14901,6 +15464,9 @@ msgstr ""
 "premikom kurzorja prikaže vrednosti na posameznem nivoju. Uporabno za "
 "večnivojsko, večskupinsko vizualizacijo."
 
+msgid "Uses the first 25 values if the dimension has more."
+msgstr ""
+
 #, fuzzy
 msgid "Valid SQL expression"
 msgstr "SQL-izraz"
@@ -14999,9 +15565,6 @@ msgstr "Navpično"
 
 msgid "Vertical (Left)"
 msgstr "Navpično (levo)"
-
-msgid "Vertical layout (rows)"
-msgstr ""
 
 msgid "View"
 msgstr "Ogled"
@@ -15169,6 +15732,9 @@ msgstr ""
 msgid "WMS"
 msgstr ""
 
+msgid "Waiting for first refresh"
+msgstr ""
+
 #, python-format
 msgid "Waiting on %s"
 msgstr "Čakanje na %s"
@@ -15201,7 +15767,7 @@ msgstr "Poizvedbe ni bilo mogoče preveriti"
 msgid "Waterfall Chart"
 msgstr "Grafikon slapov"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "We are unable to connect to your database."
 msgstr "Povezava s podatkovno bazo \"%(database)s\" ni uspela."
 
@@ -15767,6 +16333,10 @@ msgstr "Leta %s"
 msgid "Yes"
 msgstr "Da"
 
+#, fuzzy
+msgid "Yes, Cancel"
+msgstr "Da, prekini"
+
 msgid "Yes, cancel"
 msgstr "Da, prekini"
 
@@ -15777,7 +16347,7 @@ msgstr "Da, prepiši spremembe"
 msgid "You are adding tags to %s %ss"
 msgstr "Oznake dodajate %s %ss"
 
-#, fuzzy, python-format
+#, fuzzy
 msgid "You are editing a query from the virtual dataset "
 msgstr ""
 
@@ -15901,6 +16471,10 @@ msgstr "Nimate dovoljenja za urejanje tega grafikona"
 msgid "You do not have permission to edit this dashboard"
 msgstr "Nimate dovoljenja za urejanje te nadzorne plošče"
 
+#, fuzzy
+msgid "You do not have permission to perform this operation"
+msgstr "Nimate dovoljenja za urejanje tega grafikona"
+
 msgid "You do not have permission to read tags"
 msgstr "Nimate dovoljenja za branje oznak"
 
@@ -15944,8 +16518,13 @@ msgstr "Nimate pravic za ustvarjanje grafikona"
 msgid "You don't have the rights to create a dashboard"
 msgstr "Nimate pravic za ustvarjanje nadzorne plošče"
 
-msgid "You don't have the rights to download as csv"
-msgstr "Nimate pravic za prenos csv-ja"
+#, fuzzy
+msgid "You don't have the rights to export data"
+msgstr "Nimate pravic za ustvarjanje nadzorne plošče"
+
+#, fuzzy, python-format
+msgid "You have been removed from task: %s"
+msgstr "Odstranili ste ta filter."
 
 msgid "You have removed this filter."
 msgstr "Odstranili ste ta filter."
@@ -15980,8 +16559,8 @@ msgstr "Izbrati morate ime nove nadzorne plošče"
 msgid "You must run the query successfully first"
 msgstr "Najprej morate uspešno izvesti poizvedbo"
 
-msgid "You need to configure HTML sanitization to use CSS"
-msgstr "Za uporabo CSS morate nastaviti sanitizacijo HTML"
+msgid "You need to"
+msgstr ""
 
 msgid ""
 "You updated the values in the control panel, but the chart was not "
@@ -15991,6 +16570,12 @@ msgstr ""
 "Posodobili ste vrednosti v kontrolni plošči, vendar se grafikon ni "
 "samodejno posodobil. Zaženite poizvedbo z gumbom \"Posodobi grafikon\" "
 "ali"
+
+#, python-format
+msgid ""
+"You'll be removed from this task. It will continue running for %s other "
+"subscriber(s)."
+msgstr ""
 
 msgid ""
 "You've changed datasets. Any controls with data (columns, metrics) that "
@@ -16048,6 +16633,10 @@ msgstr "Vašega poročila ni mogoče izbrisati"
 #, fuzzy
 msgid "Your user information"
 msgstr "Splošne informacije"
+
+#, fuzzy
+msgid "Z-A"
+msgstr "ž - a"
 
 msgid "ZIP file contains multiple file types"
 msgstr "ZIP-datoteka vsebuje več tipov datotek"
@@ -16143,6 +16732,10 @@ msgstr "`row_offset` mora biti večja ali enaka 0"
 msgid "`width` must be greater or equal to 0"
 msgstr "`width` mora biti večja ali enaka 0"
 
+#, fuzzy
+msgid "a few seconds"
+msgstr "5 seconds"
+
 msgid "aggregate"
 msgstr "agregacija"
 
@@ -16182,6 +16775,10 @@ msgstr "samodejno"
 msgid "background"
 msgstr "ozadje"
 
+#, fuzzy
+msgid "background color"
+msgstr "ozadje"
+
 msgid "basis"
 msgstr "basis"
 
@@ -16196,6 +16793,7 @@ msgstr "v polju spodaj (primer:"
 msgid "beta"
 msgstr "Dodatno"
 
+#, python-brace-format
 msgid "between {down} and {up} {name}"
 msgstr "med {down} in {up} {name}"
 
@@ -16204,6 +16802,10 @@ msgstr "bfill"
 
 msgid "bolt"
 msgstr "vijak"
+
+#, fuzzy
+msgid "boolean"
+msgstr "BOOLEAN"
 
 msgid "boolean type icon"
 msgstr "ikona binarnega tipa"
@@ -16222,6 +16824,10 @@ msgstr "ne sme biti prazno"
 
 msgid "cardinal"
 msgstr "cardinal"
+
+#, fuzzy
+msgid "cell bar"
+msgstr "Prikaži grafe v celicah"
 
 msgid "change"
 msgstr "sprememba"
@@ -16432,6 +17038,10 @@ msgstr "zadeva sporočila"
 msgid "ends with"
 msgstr "Debelina povezave"
 
+#, fuzzy
+msgid "entire row"
+msgstr "Prazna vrstica"
+
 msgid "entries"
 msgstr "vnosi"
 
@@ -16466,8 +17076,14 @@ msgstr "vsak mesec"
 msgid "expand"
 msgstr "razširi"
 
+msgid "extra.dashboard must be an object"
+msgstr ""
+
 msgid "failed"
 msgstr "ni uspelo"
+
+msgid "farewell"
+msgstr ""
 
 msgid "fetching"
 msgstr "pridobivanje"
@@ -16491,11 +17107,18 @@ msgstr "ikona funkcijskega tipa"
 msgid "geohash (square)"
 msgstr "geohash (kvadrat)"
 
+#, fuzzy
+msgid "greeting"
+msgstr "Hranjenje dnevnikov"
+
 msgid "heatmap"
 msgstr "toplotni prikaz"
 
 msgid "heatmap: values are normalized across the entire heatmap"
 msgstr "heatmap: vrednosti so normirane po celotni temperaturni lestvici"
+
+msgid "hello"
+msgstr ""
 
 msgid "here"
 msgstr "tukaj"
@@ -16503,11 +17126,11 @@ msgstr "tukaj"
 msgid "hour"
 msgstr "ura"
 
-msgid "https://"
-msgstr ""
-
 msgid "in"
 msgstr "v"
+
+msgid "in order to run this operation."
+msgstr ""
 
 msgid "invalid email"
 msgstr "neveljaven email"
@@ -16580,11 +17203,16 @@ msgstr "zadnja particija:"
 msgid "left"
 msgstr "levo"
 
+#, python-brace-format
 msgid "less than {min} {name}"
 msgstr "manj kot {min} {name}"
 
 msgid "linear"
 msgstr "linearno"
+
+#, fuzzy
+msgid "locale_key"
+msgstr "Logaritemska skala"
 
 msgid "log"
 msgstr "dnevnik"
@@ -16630,6 +17258,7 @@ msgstr "monotone"
 msgid "month"
 msgstr "mesec"
 
+#, python-brace-format
 msgid "more than {max} {name}"
 msgstr "več kot {max} {name}"
 
@@ -16638,6 +17267,31 @@ msgstr "mora imeti vrednost"
 
 msgid "name"
 msgstr "ime"
+
+msgid "nativeFilters must be a list"
+msgstr ""
+
+#, python-format
+msgid "nativeFilters[%(idx)s] missing required keys: %(keys)s"
+msgstr ""
+
+#, python-format
+msgid "nativeFilters[%(idx)s] must be an object"
+msgstr ""
+
+#, python-format
+msgid "nativeFilters[%(idx)s].filterValues must be a list"
+msgstr ""
+
+#, python-format
+msgid ""
+"nativeFilters[%(idx)s].nativeFilterId '%(filter_id)s' does not exist on "
+"the dashboard"
+msgstr ""
+
+#, python-format
+msgid "nativeFilters[%(idx)s].nativeFilterId must be a non-empty string"
+msgstr ""
 
 msgid "no SQL validator is configured"
 msgstr "potrjevalnik SQL ni nastavljen"
@@ -16649,6 +17303,10 @@ msgstr "potrjevalnik SQL ni nastavljen za %(engine_spec)s"
 #, fuzzy
 msgid "not containing"
 msgstr "Ne vsebuje (NOT IN)"
+
+#, fuzzy
+msgid "numeric"
+msgstr "NUMERIC"
 
 msgid "numeric type icon"
 msgstr "ikona numeričnega tipa"
@@ -16731,6 +17389,10 @@ msgstr "prejšnji koledarski teden"
 
 msgid "previous calendar year"
 msgstr "prejšnje koledarsko leto"
+
+#, fuzzy
+msgid "provide authorization"
+msgstr "Potrebna je avtorizacija"
 
 msgid "quarter"
 msgstr "četrtletje"
@@ -16817,6 +17479,10 @@ msgstr "ustavljeno"
 msgid "stream"
 msgstr "tok"
 
+#, fuzzy
+msgid "string"
+msgstr "STRING"
+
 msgid "string type icon"
 msgstr "ikona znakovnega tipa"
 
@@ -16835,11 +17501,16 @@ msgstr "sintakse."
 msgid "tag"
 msgstr "oznaka"
 
-msgid "tags"
+#, fuzzy
+msgid "task"
 msgstr "oznake"
 
 msgid "temporal type icon"
 msgstr "ikona časovnega tipa"
+
+#, fuzzy
+msgid "text color"
+msgstr "Ciljna barva"
 
 msgid "textarea"
 msgstr "področje besedila"
@@ -16848,6 +17519,10 @@ msgstr "področje besedila"
 #, fuzzy
 msgid "theme"
 msgstr "Čas"
+
+#, fuzzy
+msgid "timestamp"
+msgstr "Prikaži časovno značko"
 
 #, fuzzy
 msgid "to"

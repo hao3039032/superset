@@ -36,3 +36,14 @@ The Developer Portal includes comprehensive guides for:
 - [Development How-tos](https://superset.apache.org/developer_portal/contributing/howtos)
 
 Source for the Developer Portal documentation is [located here](https://github.com/apache/superset/tree/master/docs/developer_portal).
+
+## Internationalization (i18n) & Localization
+
+When adding or modifying user-facing text:
+- Always wrap user-facing strings with `t(...)` in frontend (React/TypeScript) and `_("...")` in backend (Flask/Python).
+- Avoid string concatenation with user-facing text; use parameterized strings (e.g. `t('Hello %s', name)`).
+- Update and compile translations when adding new strings (all commands must run from the repository root, unless noted otherwise):
+  - Prerequisites: `pybabel` (installed with the development requirements) and GNU gettext (`msgcat`/`msgfmt`; on macOS install via `brew install gettext`).
+  - Extract and update catalogs: `./scripts/translations/babel_update.sh` — note this rewrites **all** locale `.po` files and produces a large diff; run it only when intentionally refreshing catalogs.
+  - Compile backend catalogs: `./scripts/translations/generate_mo_files.sh`
+  - Compile frontend JSON packs: `npm run build-translation` (inside `superset-frontend`)

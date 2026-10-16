@@ -897,11 +897,12 @@ class Superset(BaseSupersetView):
         return json_success(json.dumps(sanitize_datasource_data(datasource.data)))
 
     @event_logger.log_this
-    @has_access
     @expose("/language_pack/<lang>/")
     def language_pack(self, lang: str) -> FlaskResponse:
         # Only allow expected language formats like "en", "pt_BR", etc.
-        if not re.match(r"^[a-z]{2,3}(_[A-Z]{2})?$", lang):
+        # (re.fullmatch instead of re.match + "$" so a trailing newline --
+        # e.g. from a %0A-encoded URL -- cannot sneak past the anchor)
+        if not re.fullmatch(r"[a-z]{2,3}(_[A-Z]{2})?", lang):
             abort(400, "Invalid language code")
 
         base_dir = os.path.join(os.path.dirname(__file__), "..", "translations")

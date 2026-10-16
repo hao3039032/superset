@@ -990,7 +990,7 @@ class AnnotationLayer extends PureComponent<
               <ControlHeader label={t('Color')} />
               <ColorPicker
                 value={color}
-                presets={[{ label: 'Theme colors', colors: colorScheme }]}
+                presets={[{ label: t('Theme colors'), colors: colorScheme }]}
                 onChangeComplete={colorValue =>
                   this.setState({ color: colorValue.toHexString() })
                 }

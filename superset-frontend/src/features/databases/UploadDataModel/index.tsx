@@ -242,11 +242,11 @@ const UploadDataModal: FunctionComponent<UploadDataModalProps> = ({
   const nullValuesOptions = [
     {
       value: '""',
-      label: 'Empty Strings ""',
+      label: t('Empty Strings ""'),
     },
     {
       value: 'None',
-      label: 'None',
+      label: t('None'),
     },
     {
       value: 'nan',
@@ -265,34 +265,34 @@ const UploadDataModal: FunctionComponent<UploadDataModalProps> = ({
   const delimiterOptions = [
     {
       value: ',',
-      label: 'Comma ","',
+      label: t('Comma ","'),
     },
     {
       value: ';',
-      label: 'Semicolon ";"',
+      label: t('Semicolon ";"'),
     },
     {
       value: '\t',
-      label: 'Tab "\\t"',
+      label: t('Tab "\\t"'),
     },
     {
       value: '|',
-      label: 'Pipe',
+      label: t('Pipe "|"'),
     },
   ];
 
   const tableAlreadyExistsOptions = [
     {
       value: 'fail',
-      label: 'Fail',
+      label: t('Fail'),
     },
     {
       value: 'replace',
-      label: 'Replace',
+      label: t('Replace'),
     },
     {
       value: 'append',
-      label: 'Append',
+      label: t('Append'),
     },
   ];
 

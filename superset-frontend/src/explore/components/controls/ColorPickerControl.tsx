@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { t } from '@apache-superset/core/translation';
 import { getCategoricalSchemeRegistry } from '@superset-ui/core';
 import {
   ColorPicker,
@@ -79,7 +80,7 @@ export default function ColorPickerControl({
       <ColorPicker
         value={hexValue}
         onChangeComplete={handleChange}
-        presets={[{ label: 'Theme colors', colors: presetColors }]}
+        presets={[{ label: t('Theme colors'), colors: presetColors }]}
         showText
       />
     </div>

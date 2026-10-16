@@ -24,14 +24,26 @@ set -e
 
 export NODE_NO_WARNINGS=1
 
+PO2JSON_CMD="po2json"
+if ! command -v po2json &> /dev/null; then
+  PO2JSON_CMD="npx --yes po2json@0.4.5"
+fi
+
+PRETTIER_CMD="prettier"
+if ! command -v prettier &> /dev/null; then
+  PRETTIER_CMD="npx --yes prettier@3.8.1"
+fi
+
 for file in $( find ../superset/translations/** -name '*.po' );
 do
   extension=${file##*.}
   filename="${file%.*}"
   if [ $extension == "po" ]
   then
-    echo "po2json --domain superset --format jed1.x $file $filename.json"
-    po2json --domain superset --format jed1.x --fuzzy $file $filename.json
-    prettier --write $filename.json
+    echo "Converting $file -> $filename.json"
+    # --fallback-to-msgid keeps untranslated entries usable by falling back to
+    # the English source string instead of emitting an empty translation.
+    $PO2JSON_CMD --domain superset --format jed1.x --fuzzy --fallback-to-msgid $file $filename.json
+    $PRETTIER_CMD --write $filename.json
   fi
 done

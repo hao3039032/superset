@@ -539,7 +539,7 @@ class SaveModal extends Component<SaveModalProps, SaveModalState> {
         const tabsDataWithOutOfTab = [
           {
             value: 'OUT_OF_TAB',
-            title: 'Out of tab',
+            title: t('Out of tab'),
             key: 'OUT_OF_TAB',
             children: undefined,
           },
@@ -548,7 +548,7 @@ class SaveModal extends Component<SaveModalProps, SaveModalState> {
 
         this.setState({
           tabsData: tabsDataWithOutOfTab,
-          selectedTab: { value: 'OUT_OF_TAB', label: 'Out of tab' },
+          selectedTab: { value: 'OUT_OF_TAB', label: t('Out of tab') },
         });
       } else {
         const firstTab = treeData[0];

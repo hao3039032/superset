@@ -24,7 +24,7 @@ ARG PY_VER=3.11.14-slim-trixie
 ARG BUILDPLATFORM=${BUILDPLATFORM:-amd64}
 
 # Include translations in the final build
-ARG BUILD_TRANSLATIONS="false"
+ARG BUILD_TRANSLATIONS="true"
 
 ######################################################################
 # superset-node-ci used as a base for building frontend assets and CI
@@ -94,7 +94,7 @@ COPY superset/translations /app/superset/translations
 RUN if [ "${BUILD_TRANSLATIONS}" = "true" ]; then \
         npm run build-translation; \
     fi; \
-    rm -rf /app/superset/translations/*/*/*.[po,mo];
+    rm -rf /app/superset/translations/*/*/*.po /app/superset/translations/*/*/*.mo;
 
 
 ######################################################################
@@ -134,9 +134,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 COPY superset/translations/ /app/translations_mo/
 RUN if [ "${BUILD_TRANSLATIONS}" = "true" ]; then \
-        pybabel compile -d /app/translations_mo | true; \
+        pybabel compile -f -d /app/translations_mo | true; \
     fi; \
-    rm -f /app/translations_mo/*/*/*.[po,json]
+    rm -f /app/translations_mo/*/*/*.po /app/translations_mo/*/*/*.json
 
 ######################################################################
 # Python APP common layer

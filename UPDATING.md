@@ -24,6 +24,14 @@ assists people when migrating to a new version.
 
 ## Next
 
+### Docker images now include translations by default
+
+The Dockerfile `BUILD_TRANSLATIONS` build argument now defaults to `true`:
+`messages.json` (frontend) and `messages.mo` (backend) are compiled into the
+image without passing `--build-arg BUILD_TRANSLATIONS=true` explicitly. Deploy-
+ments that rely on the previous English-only default should pass
+`--build-arg BUILD_TRANSLATIONS=false` when building images.
+
 ### MCP error transport
 
 The optional `fastmcp` dependency requires version 3.4.7 or newer (below 4.0)
